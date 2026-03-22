@@ -1,600 +1,927 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1b4332">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>고스톱 점수계산기</title>
-  <style>
-    :root {
-      --bg: #1b4332;
-      --card: #2d6a4f;
-      --card-dark: #163d28;
-      --accent: #52b788;
-      --gold: #f4a261;
-      --red: #e63946;
-      --text: #fff;
-      --muted: #95d5b2;
-      --border: rgba(255,255,255,0.12);
-      --r: 14px;
-      --shadow: 0 4px 20px rgba(0,0,0,0.35);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
-    body { background: var(--bg); color: var(--text); max-width: 480px; margin: 0 auto; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1f15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>고스톱 점수계산기</title>
+<style>
+:root {
+  --bg0: #0d1f15;
+  --bg1: #122a1c;
+  --surface: rgba(255,255,255,0.055);
+  --surface2: rgba(255,255,255,0.09);
+  --border: rgba(255,255,255,0.1);
+  --gold: #f5a623;
+  --gold-dim: rgba(245,166,35,0.15);
+  --green: #3ecf8e;
+  --green-dim: rgba(62,207,142,0.15);
+  --red: #f43f5e;
+  --red-dim: rgba(244,63,94,0.15);
+  --blue: #60a5fa;
+  --text: #f1f5f9;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --r: 16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+body{
+  background:var(--bg0);
+  color:var(--text);
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(62,207,142,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(245,166,35,0.06) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
 
-    /* ── Screens ── */
-    .screen { display: none; min-height: 100vh; padding-bottom: 120px; }
-    .screen.active { display: block; }
+/* ── Screen ── */
+.screen{display:none;min-height:100vh;padding-bottom:110px;position:relative;z-index:1}
+.screen.active{display:block}
 
-    /* ── Header ── */
-    .header {
-      background: var(--card-dark); padding: 20px 16px 14px;
-      position: sticky; top: 0; z-index: 10;
-      border-bottom: 1px solid var(--border);
-    }
-    .header-row { display: flex; justify-content: space-between; align-items: center; }
-    .header h1 { font-size: 20px; font-weight: 700; }
-    .header .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+/* ── Glass card ── */
+.glass{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
 
-    /* ── Cards ── */
-    .card { background: var(--card); border-radius: var(--r); padding: 16px; margin: 12px 16px; box-shadow: var(--shadow); }
+/* ── Setup ── */
+.setup-wrap{padding:0 20px 20px}
 
-    /* ── Setup Hero ── */
-    .hero { text-align: center; padding: 44px 24px 20px; }
-    .hero .emoji { font-size: 72px; display: block; margin-bottom: 12px; }
-    .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
-    .hero p { color: var(--muted); font-size: 14px; }
+.hero{text-align:center;padding:60px 0 36px}
+.hero-icon{
+  width:88px;height:88px;
+  background:linear-gradient(135deg,#1a3d28,#0d1f15);
+  border:1px solid rgba(62,207,142,0.3);
+  border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;
+  margin:0 auto 20px;
+  box-shadow:0 0 40px rgba(62,207,142,0.15);
+}
+.hero h1{font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--muted2)}
 
-    /* ── Form ── */
-    .form-group { margin-bottom: 18px; }
-    .form-label { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 8px; display: block; }
-    input[type="text"], input[type="number"] {
-      width: 100%; padding: 14px 16px;
-      background: rgba(255,255,255,0.09); border: 1.5px solid var(--border);
-      border-radius: 10px; color: var(--text); font-size: 16px;
-      outline: none; transition: border-color .2s; font-family: inherit;
-    }
-    input:focus { border-color: var(--accent); }
-    input::placeholder { color: rgba(255,255,255,0.28); }
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;
+}
 
-    /* ── Toggle Group ── */
-    .toggle-group { display: flex; gap: 8px; }
-    .toggle-btn {
-      flex: 1; padding: 12px; background: rgba(255,255,255,0.08);
-      border: 2px solid transparent; border-radius: 10px;
-      color: var(--muted); font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: all .2s; font-family: inherit;
-    }
-    .toggle-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.setup-card{padding:20px;margin-bottom:14px}
 
-    /* ── Buttons ── */
-    .btn {
-      display: block; width: 100%; padding: 15px; border: none;
-      border-radius: var(--r); font-size: 16px; font-weight: 700;
-      cursor: pointer; transition: all .15s; font-family: inherit; text-align: center;
-    }
-    .btn:active { transform: scale(0.97); opacity: .9; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: rgba(255,255,255,0.1); color: var(--text); }
-    .btn-gold { background: var(--gold); color: #1b4332; }
-    .btn-red { background: var(--red); color: #fff; }
-    .btn-sm { padding: 9px 14px; font-size: 13px; width: auto; display: inline-block; border-radius: 10px; }
-    .mt-8 { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
+/* Count toggle */
+.count-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.count-btn{
+  padding:14px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  color:var(--muted2);
+  font-size:22px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+  font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.count-btn span{font-size:11px;font-weight:500;color:var(--muted)}
+.count-btn.active{
+  background:var(--green-dim);
+  border-color:var(--green);
+  color:var(--green);
+}
+.count-btn.active span{color:var(--green)}
 
-    /* ── Player Grid ── */
-    .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 16px; }
-    .player-card {
-      background: var(--card); border-radius: var(--r); padding: 16px 12px;
-      text-align: center; box-shadow: var(--shadow); border: 2px solid transparent;
-      transition: border-color .2s;
-    }
-    .player-card.top { border-color: var(--gold); }
-    .player-card.bottom { border-color: rgba(230,57,70,0.5); }
-    .player-card .p-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .player-card .p-bal { font-size: 22px; font-weight: 800; }
-    .player-card .p-meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .bal-pos { color: var(--gold); }
-    .bal-neg { color: var(--red); }
-    .bal-zero { color: var(--muted); }
+/* Name inputs */
+.name-list{display:flex;flex-direction:column;gap:8px}
+.name-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:0 14px;
+  transition:border-color .2s;
+}
+.name-row:focus-within{border-color:var(--green)}
+.name-avatar{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;flex-shrink:0;
+}
+.name-input{
+  flex:1;padding:14px 0;
+  background:transparent;border:none;
+  color:var(--text);font-size:16px;
+  outline:none;font-family:inherit;
+}
+.name-input::placeholder{color:var(--muted)}
 
-    /* ── Round History ── */
-    .round-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
-    .round-item:last-child { border-bottom: none; }
-    .round-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .round-num { font-weight: 700; color: var(--accent); font-size: 12px; }
-    .round-winner { font-weight: 600; font-size: 14px; }
-    .round-detail { color: var(--muted); font-size: 12px; line-height: 1.6; }
-    .tag { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: 11px; font-weight: 600; margin: 1px; }
-    .tag-go { background: rgba(82,183,136,.2); color: var(--accent); }
-    .tag-sp { background: rgba(244,162,97,.2); color: var(--gold); }
-    .tag-bad { background: rgba(230,57,70,.2); color: var(--red); }
+/* Unit input */
+.unit-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:0 16px;
+  transition:border-color .2s;
+}
+.unit-row:focus-within{border-color:var(--gold)}
+.unit-prefix{color:var(--gold);font-weight:700;font-size:18px}
+.unit-input{
+  flex:1;padding:16px 0;
+  background:transparent;border:none;
+  color:var(--text);font-size:20px;font-weight:700;
+  outline:none;font-family:inherit;
+}
+.unit-suffix{color:var(--muted2);font-size:14px}
 
-    /* ── Empty State ── */
-    .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
-    .empty .icon { font-size: 48px; margin-bottom: 12px; }
+/* Start btn */
+.btn-start{
+  width:100%;padding:18px;border:none;
+  background:linear-gradient(135deg,#2dd4bf,#3ecf8e);
+  border-radius:14px;
+  color:#0d1f15;font-size:17px;font-weight:800;
+  cursor:pointer;transition:all .15s;
+  font-family:inherit;
+  box-shadow:0 4px 20px rgba(62,207,142,0.3);
+  letter-spacing:-0.3px;
+}
+.btn-start:active{transform:scale(0.97);opacity:.9}
 
-    /* ── Section Title ── */
-    .sec-title { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 12px; }
+.rules-card{padding:18px;font-size:13px;color:var(--muted2);line-height:1.9}
+.rules-card strong{color:var(--text)}
 
-    /* ── FAB ── */
-    .fab {
-      position: fixed; bottom: 80px; right: 16px;
-      width: 58px; height: 58px; background: var(--accent);
-      border-radius: 50%; border: none; font-size: 30px; color: #fff;
-      cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      display: flex; align-items: center; justify-content: center;
-      transition: all .2s; z-index: 20;
-    }
-    @media (min-width: 480px) { .fab { right: calc(50vw - 224px); } }
-    .fab:active { transform: scale(0.88); }
+/* ── Game header ── */
+.game-header{
+  padding:20px 20px 0;
+  position:sticky;top:0;z-index:10;
+  background:linear-gradient(to bottom,var(--bg0) 80%,transparent);
+  padding-bottom:12px;
+}
+.game-header-row{display:flex;justify-content:space-between;align-items:center}
+.game-title{font-size:18px;font-weight:800}
+.game-meta{font-size:13px;color:var(--muted2);margin-top:3px}
+.btn-settle-header{
+  padding:8px 16px;
+  background:linear-gradient(135deg,var(--gold-dim),rgba(245,166,35,0.08));
+  border:1px solid rgba(245,166,35,0.4);
+  border-radius:20px;
+  color:var(--gold);font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.btn-settle-header:active{transform:scale(0.95)}
 
-    /* ── Bottom Bar ── */
-    .bottom-bar {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 480px;
-      background: var(--card-dark); padding: 10px 16px 14px;
-      border-top: 1px solid var(--border);
-      display: flex; gap: 8px; z-index: 15;
-    }
+/* ── Player grid ── */
+.player-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:12px 20px;
+}
+.p-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 14px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .3s;
+}
+.p-card::before{
+  content:'';
+  position:absolute;inset:0;
+  opacity:0;transition:opacity .3s;
+}
+.p-card.rank1{border-color:rgba(245,166,35,0.5)}
+.p-card.rank1::before{
+  background:radial-gradient(ellipse at 50% 0%,rgba(245,166,35,0.1),transparent 70%);
+  opacity:1;
+}
+.p-card.last{border-color:rgba(244,63,94,0.3)}
+.p-rank{
+  position:absolute;top:10px;right:10px;
+  font-size:16px;
+}
+.p-name{
+  font-size:14px;font-weight:700;
+  margin-bottom:10px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.p-balance{font-size:24px;font-weight:800;letter-spacing:-1px;line-height:1}
+.p-balance.pos{color:var(--gold)}
+.p-balance.neg{color:var(--red)}
+.p-balance.zero{color:var(--muted2)}
+.p-wins{font-size:11px;color:var(--muted);margin-top:6px}
 
-    /* ── Modal (bottom sheet) ── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.65); z-index: 100; align-items: flex-end;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-sheet {
-      background: #1e4d3a; border-radius: 22px 22px 0 0;
-      width: 100%; max-width: 480px; margin: 0 auto;
-      max-height: 92vh; overflow-y: auto; padding: 0 16px 40px;
-    }
-    .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 14px auto 20px; }
-    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+/* ── History ── */
+.history-wrap{padding:0 20px}
+.history-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;
+}
+.history-card{padding:4px 0}
+.round-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.round-item:last-child{border-bottom:none}
+.round-num-badge{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--muted2);
+  flex-shrink:0;margin-top:1px;
+}
+.round-content{flex:1}
+.round-winner-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:4px;
+}
+.round-winner-name{font-size:15px;font-weight:700}
+.round-win-amount{font-size:15px;font-weight:800;color:var(--gold)}
+.round-tags{margin-bottom:4px}
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:20px;
+  font-size:11px;font-weight:600;margin-right:4px;
+}
+.tag-go{background:rgba(96,165,250,0.15);color:var(--blue)}
+.tag-sp{background:rgba(245,166,35,0.15);color:var(--gold)}
+.tag-bad{background:rgba(244,63,94,0.15);color:var(--red)}
+.round-losers{font-size:12px;color:var(--muted2);line-height:1.6}
 
-    /* ── Player Selector ── */
-    .player-sel { display: flex; gap: 8px; flex-wrap: wrap; }
-    .player-btn {
-      flex: 1; min-width: 76px; padding: 12px 8px;
-      background: rgba(255,255,255,0.08); border: 2px solid transparent;
-      border-radius: 10px; color: var(--muted); font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all .2s; font-family: inherit; text-align: center;
-    }
-    .player-btn.sel { background: rgba(82,183,136,.2); border-color: var(--accent); color: #fff; }
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted2)}
+.empty-icon{font-size:52px;margin-bottom:14px}
+.empty-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--muted2)}
+.empty-sub{font-size:13px;color:var(--muted)}
 
-    /* ── Stepper ── */
-    .stepper-row { display: flex; align-items: center; gap: 16px; }
-    .stepper { display: flex; align-items: center; gap: 12px; }
-    .step-btn {
-      width: 44px; height: 44px; background: rgba(255,255,255,0.1);
-      border: none; border-radius: 50%; font-size: 22px; color: #fff;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-family: inherit; transition: all .15s;
-    }
-    .step-btn:active { transform: scale(0.88); background: var(--accent); }
-    .step-val { font-size: 30px; font-weight: 800; min-width: 52px; text-align: center; }
-    .step-unit { font-size: 13px; color: var(--muted); margin-left: 4px; }
-    .step-info { font-size: 14px; color: var(--muted); }
-    .step-info strong { color: var(--accent); }
+/* ── Bottom bar ── */
+.bottom-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  padding:12px 20px max(16px, env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--bg0) 70%,transparent);
+  display:flex;gap:8px;z-index:20;
+}
+.btn-bar{
+  padding:15px 0;border:none;border-radius:14px;
+  font-size:14px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:all .15s;flex:1;
+}
+.btn-bar:active{transform:scale(0.96)}
+.btn-bar-sm{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted2);
+}
+.btn-bar-main{
+  background:linear-gradient(135deg,#f59e0b,#f5a623);
+  color:#0d1f15;
+  box-shadow:0 4px 16px rgba(245,166,35,0.3);
+  flex:2;
+}
 
-    /* ── Toggle Switch ── */
-    .check-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 13px 0; border-bottom: 1px solid var(--border); cursor: pointer;
-    }
-    .check-row:last-child { border-bottom: none; }
-    .check-main { font-size: 15px; font-weight: 500; }
-    .check-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .switch { width: 48px; height: 26px; background: rgba(255,255,255,0.15); border-radius: 13px; position: relative; transition: background .2s; flex-shrink: 0; }
-    .switch::after { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: left .2s; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
-    .switch.on { background: var(--accent); }
-    .switch.on::after { left: 24px; }
+/* ── FAB ── */
+.fab{
+  position:fixed;bottom:88px;right:20px;
+  width:60px;height:60px;
+  background:linear-gradient(135deg,#2dd4bf,#3ecf8e);
+  border-radius:50%;border:none;
+  font-size:32px;color:#0d1f15;
+  cursor:pointer;
+  box-shadow:0 6px 24px rgba(62,207,142,0.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;z-index:25;
+  font-weight:300;
+}
+@media(min-width:430px){.fab{right:calc(50vw - 195px)}}
+.fab:active{transform:scale(0.88);box-shadow:0 2px 12px rgba(62,207,142,0.3)}
 
-    /* ── Loser Rules ── */
-    .loser-box { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
-    .loser-title { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
-    .loser-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .loser-row:last-child { border-bottom: none; }
-    .checkbox { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; transition: all .15s; }
-    .checkbox.on { background: var(--red); border-color: var(--red); }
-    .checkbox.on::after { content: '✓'; color: #fff; font-weight: 700; }
-    .loser-row-label { font-size: 14px; }
-    .loser-row-sub { font-size: 12px; color: var(--muted); }
+/* ── Modal ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:100;
+  align-items:flex-end;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex}
+.modal-sheet{
+  background:#111f18;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:430px;margin:0 auto;
+  max-height:94vh;overflow-y:auto;
+  padding:0 20px max(28px,env(safe-area-inset-bottom));
+}
+.modal-handle{
+  width:36px;height:4px;
+  background:rgba(255,255,255,0.15);
+  border-radius:2px;
+  margin:14px auto 22px;
+}
+.modal-title{font-size:19px;font-weight:800;margin-bottom:22px;letter-spacing:-0.3px}
 
-    /* ── Preview ── */
-    .preview { background: rgba(0,0,0,0.22); border-radius: 10px; padding: 14px; margin-top: 14px; }
-    .preview-title { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 10px; }
-    .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 14px; }
-    .preview-divider { height: 1px; background: var(--border); margin: 8px 0; }
-    .preview-total { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; margin-top: 6px; border-top: 1px solid var(--border); font-size: 16px; font-weight: 700; }
-    .amt-gain { color: var(--gold); font-weight: 700; }
-    .amt-loss { color: var(--red); font-weight: 700; }
+/* Section in modal */
+.m-section{margin-bottom:22px}
+.m-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
-    /* ── Settlement ── */
-    .settle-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--border); }
-    .settle-row:last-child { border-bottom: none; }
-    .settle-name { font-size: 16px; font-weight: 600; }
-    .settle-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .settle-amt { font-size: 18px; font-weight: 800; }
-    .transfer-card { display: flex; align-items: center; gap: 10px; padding: 14px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 8px; }
-    .tf-from { font-weight: 600; font-size: 15px; }
-    .tf-arrow { font-size: 18px; color: var(--accent); }
-    .tf-to { font-weight: 600; font-size: 15px; }
-    .tf-amt { margin-left: auto; font-weight: 800; font-size: 17px; color: var(--gold); }
+/* Player buttons */
+.winner-grid{display:grid;gap:8px}
+.winner-grid.p3{grid-template-columns:repeat(3,1fr)}
+.winner-grid.p4{grid-template-columns:repeat(4,1fr)}
+.winner-btn{
+  padding:12px 8px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  color:var(--muted2);
+  font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+  font-family:inherit;text-align:center;
+}
+.winner-btn .wbadge{font-size:18px;display:block;margin-bottom:4px}
+.winner-btn.sel{
+  background:rgba(62,207,142,0.15);
+  border-color:var(--green);
+  color:#fff;
+}
 
-    /* ── Divider ── */
-    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+/* Stepper */
+.stepper-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+  display:flex;align-items:center;gap:0;
+}
+.step-btn{
+  width:44px;height:44px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  font-size:22px;color:var(--text);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-family:inherit;transition:all .15s;flex-shrink:0;
+}
+.step-btn:active{background:var(--green-dim);border-color:var(--green)}
+.step-center{flex:1;text-align:center}
+.step-val{font-size:36px;font-weight:800;line-height:1;letter-spacing:-1px}
+.step-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.step-badge{
+  display:inline-block;padding:3px 10px;
+  background:var(--green-dim);border-radius:20px;
+  font-size:13px;font-weight:700;color:var(--green);
+  margin-top:6px;
+}
 
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-    .shake { animation: shake .3s ease; }
-  </style>
+/* Toggle row */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;
+}
+.toggle-row:last-child{border-bottom:none}
+.toggle-left{}
+.toggle-main{font-size:15px;font-weight:600}
+.toggle-sub{font-size:12px;color:var(--muted2);margin-top:2px}
+.switch{
+  width:50px;height:28px;
+  background:rgba(255,255,255,0.1);
+  border-radius:14px;position:relative;
+  transition:background .25s;flex-shrink:0;
+}
+.switch::after{
+  content:'';position:absolute;
+  width:24px;height:24px;
+  background:#fff;border-radius:50%;
+  top:2px;left:2px;
+  transition:left .25s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+.switch.on{background:var(--green)}
+.switch.on::after{left:24px}
+
+/* Loser rules */
+.loser-block{
+  background:rgba(244,63,94,0.05);
+  border:1px solid rgba(244,63,94,0.15);
+  border-radius:12px;padding:14px;margin-bottom:8px;
+}
+.loser-name-row{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:10px;
+}
+.loser-avatar{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+}
+.loser-name{font-size:14px;font-weight:700}
+.loser-check-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.loser-check-row:last-child{border-bottom:none}
+.checkbox{
+  width:22px;height:22px;
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(244,63,94,0.4);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;transition:all .15s;flex-shrink:0;
+}
+.checkbox.on{background:var(--red);border-color:var(--red)}
+.checkbox.on::after{content:'✓';color:#fff;font-weight:800}
+.check-label{font-size:14px}
+.check-sub{font-size:12px;color:var(--muted2)}
+
+/* Preview */
+.preview-box{
+  background:rgba(245,166,35,0.06);
+  border:1px solid rgba(245,166,35,0.2);
+  border-radius:14px;padding:16px;margin-top:4px;
+}
+.preview-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:14px}
+.prow-muted{color:var(--muted2)}
+.pdivider{height:1px;background:rgba(245,166,35,0.15);margin:8px 0}
+.ptotal{display:flex;justify-content:space-between;align-items:center;padding-top:8px;font-size:17px;font-weight:800}
+.amt-gain{color:var(--gold)}
+.amt-loss{color:var(--red)}
+
+/* Confirm btn */
+.btn-confirm{
+  width:100%;padding:18px;border:none;
+  background:linear-gradient(135deg,#2dd4bf,#3ecf8e);
+  border-radius:14px;
+  color:#0d1f15;font-size:17px;font-weight:800;
+  cursor:pointer;transition:all .15s;
+  font-family:inherit;
+  box-shadow:0 4px 20px rgba(62,207,142,0.25);
+}
+.btn-confirm:active{transform:scale(0.97)}
+.btn-cancel{
+  width:100%;padding:15px;border:none;
+  background:transparent;color:var(--muted2);
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:inherit;margin-top:8px;
+}
+
+/* ── Settlement ── */
+.settle-wrap{padding:0 20px 20px}
+.settle-header{
+  padding:24px 0 16px;
+  border-bottom:1px solid var(--border);margin-bottom:20px;
+}
+.settle-title{font-size:22px;font-weight:800;margin-bottom:4px}
+.settle-meta{font-size:14px;color:var(--muted2)}
+
+/* Podium */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;padding:20px 0;margin-bottom:24px}
+.podium-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.podium-medal{font-size:28px}
+.podium-bar{
+  border-radius:8px 8px 0 0;
+  width:80px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;
+  padding-top:10px;
+  gap:4px;
+}
+.podium-bar.p1{background:linear-gradient(to bottom,rgba(245,166,35,0.25),rgba(245,166,35,0.08));border:1px solid rgba(245,166,35,0.3);height:100px}
+.podium-bar.p2{background:linear-gradient(to bottom,rgba(148,163,184,0.2),rgba(148,163,184,0.05));border:1px solid rgba(148,163,184,0.2);height:76px}
+.podium-bar.p3{background:linear-gradient(to bottom,rgba(180,120,60,0.2),rgba(180,120,60,0.05));border:1px solid rgba(180,120,60,0.2);height:56px}
+.podium-bar.p4{background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.15);height:40px}
+.podium-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px;text-align:center}
+.podium-amount{font-size:11px;font-weight:800}
+
+/* Player result list */
+.result-list{margin-bottom:24px}
+.result-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--border);
+}
+.result-item:last-child{border-bottom:none}
+.result-avatar{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:800;flex-shrink:0;
+}
+.result-info{flex:1}
+.result-name{font-size:16px;font-weight:700}
+.result-wins{font-size:12px;color:var(--muted2);margin-top:2px}
+.result-bal{font-size:20px;font-weight:800;text-align:right}
+
+/* Transfers */
+.transfers-section{margin-bottom:24px}
+.transfers-title{font-size:15px;font-weight:700;margin-bottom:12px}
+.transfer-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;margin-bottom:8px;
+}
+.tf-from-badge,.tf-to-badge{
+  height:32px;padding:0 12px;
+  border-radius:20px;
+  display:flex;align-items:center;
+  font-size:14px;font-weight:700;
+  white-space:nowrap;
+}
+.tf-from-badge{background:var(--red-dim);color:var(--red)}
+.tf-to-badge{background:var(--green-dim);color:var(--green)}
+.tf-arrow{color:var(--muted);font-size:14px;flex-shrink:0}
+.tf-amount{margin-left:auto;font-size:17px;font-weight:800;color:var(--gold);white-space:nowrap}
+
+/* Share / new game btns */
+.settle-actions{display:flex;flex-direction:column;gap:10px}
+.btn-share{
+  width:100%;padding:17px;border:none;
+  background:linear-gradient(135deg,rgba(245,166,35,0.2),rgba(245,166,35,0.08));
+  border:1px solid rgba(245,166,35,0.4);
+  border-radius:14px;color:var(--gold);
+  font-size:16px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.btn-share:active{transform:scale(0.97)}
+.btn-new{
+  width:100%;padding:17px;border:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;color:var(--muted2);
+  font-size:16px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.btn-new:active{transform:scale(0.97)}
+
+/* Avatar colors */
+.av0{background:rgba(62,207,142,0.2);color:#3ecf8e}
+.av1{background:rgba(96,165,250,0.2);color:#60a5fa}
+.av2{background:rgba(245,166,35,0.2);color:#f5a623}
+.av3{background:rgba(244,63,94,0.2);color:#f43f5e}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.slide-up{animation:slideUp .3s ease}
+</style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════ -->
-<!--  SETUP SCREEN                         -->
-<!-- ══════════════════════════════════════ -->
+<!-- ══ SETUP ══ -->
 <div id="screen-setup" class="screen active">
-  <div class="hero">
-    <span class="emoji">🃏</span>
-    <h1>고스톱 계산기</h1>
-    <p>가족과 함께 즐기는 점수 계산</p>
-  </div>
+  <div class="setup-wrap">
+    <div class="hero">
+      <div class="hero-icon">🃏</div>
+      <h1>고스톱 계산기</h1>
+      <p>가족과 함께하는 스마트 점수 계산</p>
+    </div>
 
-  <div class="card">
-    <div class="form-group">
-      <label class="form-label">👥 인원 수</label>
-      <div class="toggle-group" id="count-toggle">
-        <button class="toggle-btn active" data-count="3" onclick="setCount(3)">3명</button>
-        <button class="toggle-btn" data-count="4" onclick="setCount(4)">4명</button>
+    <div class="glass setup-card">
+      <div class="section-label">인원 수</div>
+      <div class="count-toggle" id="count-toggle">
+        <button class="count-btn active" data-n="3" onclick="setCount(3)">
+          3<span>명</span>
+        </button>
+        <button class="count-btn" data-n="4" onclick="setCount(4)">
+          4<span>명</span>
+        </button>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">✏️ 플레이어 이름</label>
-      <div id="name-inputs" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <div class="glass setup-card">
+      <div class="section-label">플레이어 이름</div>
+      <div class="name-list" id="name-list"></div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">💰 기본 단위 (원/판)</label>
-      <input type="number" id="base-unit" value="100" min="10" step="10" inputmode="numeric">
-      <div style="font-size:12px;color:var(--muted);margin-top:6px;">예: 100원 단위, 1,000원 단위</div>
+    <div class="glass setup-card">
+      <div class="section-label">기본 단위 (판돈)</div>
+      <div class="unit-row">
+        <span class="unit-prefix">₩</span>
+        <input class="unit-input" type="number" id="base-unit" value="100" min="10" step="10" inputmode="numeric">
+        <span class="unit-suffix">원 / 단위</span>
+      </div>
     </div>
 
-    <button class="btn btn-primary" onclick="startGame()">게임 시작 →</button>
-  </div>
+    <button class="btn-start" onclick="startGame()">게임 시작 →</button>
 
-  <div class="card" style="font-size:13px;color:var(--muted);line-height:1.9;">
-    <div style="font-weight:700;color:var(--text);margin-bottom:8px;">📋 적용 규칙</div>
-    <div>• 3점=1단위, 4점=2단위, 5점=3단위 (N점 = N-2단위)</div>
-    <div>• 고 1번=×2, 2번=×3, 3번=×4 (고 N번 = ×N+1)</div>
-    <div>• 흔들기=×2 / 폭탄=×2 (중첩 적용)</div>
-    <div>• 피박: 해당 패자만 ×2 / 광박: 해당 패자만 ×2</div>
-    <div>• 3~4명 모두 지원, 1명 승리 → 나머지 전원 정산</div>
+    <div class="glass rules-card" style="margin-top:14px;">
+      <strong>📋 규칙 안내</strong>
+      <div style="margin-top:10px;">
+        <div>· 3점=1단위, N점=(N-2)단위</div>
+        <div>· 고 N번 → 전체 ×(N+1)배</div>
+        <div>· 흔들기·폭탄 → 각 ×2배 (중첩)</div>
+        <div>· 피박·광박 → 해당 패자만 ×2배</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--  GAME SCREEN                          -->
-<!-- ══════════════════════════════════════ -->
+<!-- ══ GAME ══ -->
 <div id="screen-game" class="screen">
-  <div class="header">
-    <div class="header-row">
+  <div class="game-header">
+    <div class="game-header-row">
       <div>
-        <h1>고스톱 계산기</h1>
-        <div class="sub" id="game-sub">0판 진행 중</div>
+        <div class="game-title">진행 중 🎴</div>
+        <div class="game-meta" id="game-meta">0판 · 단위 100원</div>
       </div>
-      <button class="btn btn-sm btn-secondary" onclick="showSettlement()">정산 →</button>
+      <button class="btn-settle-header" onclick="showSettlement()">정산 💰</button>
     </div>
   </div>
 
   <div class="player-grid" id="player-grid"></div>
 
-  <div class="card">
-    <div class="sec-title">판 기록</div>
-    <div id="round-list">
-      <div class="empty"><div class="icon">🎴</div><div>아직 진행한 판이 없습니다</div><div style="font-size:12px;margin-top:4px;">+ 버튼을 눌러 점수를 입력하세요</div></div>
+  <div class="history-wrap">
+    <div class="history-header">
+      <div class="section-label" style="margin-bottom:0">판 기록</div>
+    </div>
+    <div class="glass history-card" id="history-card">
+      <div class="empty-state">
+        <div class="empty-icon">🎴</div>
+        <div class="empty-title">아직 기록이 없습니다</div>
+        <div class="empty-sub">+ 버튼을 눌러 점수를 입력하세요</div>
+      </div>
     </div>
   </div>
 
   <button class="fab" onclick="openModal()">+</button>
 
   <div class="bottom-bar">
-    <button class="btn btn-secondary" onclick="undoRound()" style="flex:1;">↩ 취소</button>
-    <button class="btn btn-secondary" onclick="confirmReset()" style="flex:1;">🔄 새게임</button>
-    <button class="btn btn-gold" onclick="showSettlement()" style="flex:2;">💰 정산</button>
+    <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 취소</button>
+    <button class="btn-bar btn-bar-sm" onclick="confirmReset()">새게임</button>
+    <button class="btn-bar btn-bar-main" onclick="showSettlement()">💰 최종 정산</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--  SETTLEMENT SCREEN                    -->
-<!-- ══════════════════════════════════════ -->
+<!-- ══ SETTLEMENT ══ -->
 <div id="screen-settlement" class="screen">
-  <div class="header">
-    <div class="header-row">
+  <div class="settle-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:20px;">
       <div>
-        <h1>최종 정산</h1>
-        <div class="sub" id="settle-sub"></div>
+        <div class="settle-title">최종 정산 🏆</div>
+        <div class="settle-meta" id="settle-meta"></div>
       </div>
-      <button class="btn btn-sm btn-secondary" onclick="showScreen('game')">← 계속</button>
+      <button class="btn-settle-header" onclick="showScreen('game')" style="border-color:rgba(255,255,255,0.2);color:var(--muted2);background:var(--surface)">← 계속</button>
+    </div>
+
+    <div id="podium-wrap"></div>
+
+    <div class="section-label">플레이어 결과</div>
+    <div class="glass result-list" style="padding:4px 16px;" id="result-list"></div>
+
+    <div class="transfers-section">
+      <div class="section-label">💸 정산 내역</div>
+      <div id="transfer-list"></div>
+    </div>
+
+    <div class="settle-actions">
+      <button class="btn-share" onclick="shareResult()">📤 카카오톡으로 공유</button>
+      <button class="btn-new" onclick="confirmReset()">🔄 새 게임 시작</button>
     </div>
   </div>
-
-  <div class="card">
-    <div class="sec-title">플레이어별 결과</div>
-    <div id="settle-players"></div>
-  </div>
-
-  <div class="card">
-    <div class="sec-title">💸 정산 내역 (누가 누구에게)</div>
-    <div id="settle-transfers"></div>
-  </div>
-
-  <div class="card">
-    <button class="btn btn-primary" onclick="shareResult()">📤 결과 공유 (카톡)</button>
-    <button class="btn btn-secondary mt-8" onclick="confirmReset()">🔄 새 게임 시작</button>
-  </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!--  ROUND MODAL                          -->
-<!-- ══════════════════════════════════════ -->
+<!-- ══ MODAL ══ -->
 <div id="modal-overlay" class="modal-overlay">
   <div class="modal-sheet" id="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">🎴 판 점수 입력</div>
+    <div class="modal-title">판 점수 입력</div>
 
     <!-- Winner -->
-    <div class="form-group">
-      <div class="form-label">승자 선택</div>
-      <div class="player-sel" id="winner-sel"></div>
+    <div class="m-section">
+      <div class="m-label">승자</div>
+      <div class="winner-grid" id="winner-grid"></div>
     </div>
 
     <!-- Score -->
-    <div class="form-group">
-      <div class="form-label">점수</div>
-      <div class="stepper-row">
-        <div class="stepper">
-          <button class="step-btn" id="score-minus">−</button>
-          <div style="text-align:center;">
-            <div class="step-val" id="score-val">3</div>
-            <div style="font-size:12px;color:var(--muted);">점</div>
-          </div>
-          <button class="step-btn" id="score-plus">+</button>
+    <div class="m-section">
+      <div class="m-label">점수</div>
+      <div class="stepper-box">
+        <button class="step-btn" id="score-minus">−</button>
+        <div class="step-center">
+          <div class="step-val" id="score-val">3</div>
+          <div class="step-sub">점</div>
+          <div class="step-badge" id="score-badge">= 1단위</div>
         </div>
-        <div class="step-info">= <strong id="score-units">1</strong>단위</div>
+        <button class="step-btn" id="score-plus">+</button>
       </div>
     </div>
 
-    <!-- Go count -->
-    <div class="form-group">
-      <div class="form-label">고(GO) 횟수</div>
-      <div class="stepper-row">
-        <div class="stepper">
-          <button class="step-btn" id="go-minus">−</button>
-          <div style="text-align:center;">
-            <div class="step-val" id="go-val">0</div>
-            <div style="font-size:12px;color:var(--muted);">번</div>
-          </div>
-          <button class="step-btn" id="go-plus">+</button>
+    <!-- Go -->
+    <div class="m-section">
+      <div class="m-label">고(GO) 횟수</div>
+      <div class="stepper-box">
+        <button class="step-btn" id="go-minus">−</button>
+        <div class="step-center">
+          <div class="step-val" id="go-val">0</div>
+          <div class="step-sub">번</div>
+          <div class="step-badge" id="go-badge" style="background:var(--green-dim);color:var(--green)">×1 배율</div>
         </div>
-        <div class="step-info">배율: <strong id="go-mult">×1</strong></div>
+        <button class="step-btn" id="go-plus">+</button>
       </div>
     </div>
 
-    <!-- Special rules -->
-    <div class="form-group">
-      <div class="form-label">특수 규칙</div>
-      <div class="check-row" id="row-shake">
-        <div><div class="check-main">흔들기</div><div class="check-sub">같은 패 2장 → ×2배</div></div>
-        <div class="switch" id="sw-shake"></div>
-      </div>
-      <div class="check-row" id="row-bomb">
-        <div><div class="check-main">폭탄</div><div class="check-sub">같은 패 4장 획득 → ×2배</div></div>
-        <div class="switch" id="sw-bomb"></div>
+    <!-- Specials -->
+    <div class="m-section">
+      <div class="m-label">특수 규칙</div>
+      <div class="glass" style="padding:4px 16px;border-radius:14px;">
+        <div class="toggle-row" id="row-shake">
+          <div class="toggle-left">
+            <div class="toggle-main">🤝 흔들기</div>
+            <div class="toggle-sub">같은 패 2장 → 전체 ×2배</div>
+          </div>
+          <div class="switch" id="sw-shake"></div>
+        </div>
+        <div class="toggle-row" id="row-bomb">
+          <div class="toggle-left">
+            <div class="toggle-main">💣 폭탄</div>
+            <div class="toggle-sub">같은 패 4장 획득 → 전체 ×2배</div>
+          </div>
+          <div class="switch" id="sw-bomb"></div>
+        </div>
       </div>
     </div>
 
-    <!-- Loser special rules -->
-    <div class="form-group" id="loser-section" style="display:none;">
-      <div class="form-label">패자별 추가 적용</div>
+    <!-- Loser rules -->
+    <div class="m-section" id="loser-section" style="display:none;">
+      <div class="m-label">패자별 벌칙</div>
       <div id="loser-container"></div>
     </div>
 
     <!-- Preview -->
-    <div class="preview" id="preview" style="display:none;">
-      <div class="preview-title">📊 계산 미리보기</div>
+    <div class="preview-box" id="preview" style="display:none;">
+      <div class="preview-title">계산 미리보기</div>
       <div id="preview-body"></div>
     </div>
 
-    <div style="margin-top:16px;">
-      <button class="btn btn-primary" id="confirm-btn">확인 →</button>
-      <button class="btn btn-secondary mt-8" onclick="closeModal()">취소</button>
-    </div>
+    <button class="btn-confirm" id="confirm-btn" style="margin-top:20px;">확인 →</button>
+    <button class="btn-cancel" onclick="closeModal()">취소</button>
   </div>
 </div>
 
 <script>
-// ────────────────────────────────────────
-// STATE
-// ────────────────────────────────────────
-const STORAGE_KEY = 'gostop_v2';
+const SAVE_KEY = 'gostop_v3';
+const AV = ['av0','av1','av2','av3'];
+const MEDALS = ['🥇','🥈','🥉','😢'];
+const INITIALS = (s) => s.slice(0,1);
 
-let G = {
-  playerCount: 3,
-  players: [],
-  baseUnit: 100,
-  balances: {},
-  rounds: []
-};
+let G = { playerCount:3, players:[], baseUnit:100, balances:{}, rounds:[] };
+let M = { winner:null, score:3, go:0, shake:false, bomb:false, loser:{} };
 
-let M = {           // modal state
-  winner: null,
-  score: 3,
-  go: 0,
-  shake: false,
-  bomb: false,
-  loser: {}         // { name: { pibak, gwangbak } }
-};
-
-// ────────────────────────────────────────
-// SETUP
-// ────────────────────────────────────────
+// ── SETUP ──
 function setCount(n) {
   G.playerCount = n;
-  document.querySelectorAll('#count-toggle .toggle-btn').forEach(b => {
-    b.classList.toggle('active', +b.dataset.count === n);
-  });
-  renderNameInputs();
+  document.querySelectorAll('.count-btn').forEach(b => b.classList.toggle('active', +b.dataset.n === n));
+  renderNameList();
 }
 
-function renderNameInputs() {
-  const c = document.getElementById('name-inputs');
+function renderNameList() {
+  const c = document.getElementById('name-list');
   c.innerHTML = '';
   const def = ['플레이어1','플레이어2','플레이어3','플레이어4'];
   for (let i = 0; i < G.playerCount; i++) {
-    const inp = document.createElement('input');
-    inp.type = 'text';
-    inp.placeholder = def[i];
-    inp.value = G.players[i] || '';
-    inp.id = 'pname-' + i;
-    c.appendChild(inp);
+    const row = document.createElement('div');
+    row.className = 'name-row';
+    row.innerHTML =
+      '<div class="name-avatar ' + AV[i] + '">' + (i+1) + '</div>' +
+      '<input class="name-input" id="n' + i + '" type="text" placeholder="' + def[i] + '" value="' + (G.players[i]||'') + '" maxlength="8">';
+    c.appendChild(row);
   }
 }
 
 function startGame() {
   const names = [];
   for (let i = 0; i < G.playerCount; i++) {
-    const v = document.getElementById('pname-' + i).value.trim() || ('플레이어' + (i+1));
-    names.push(v);
+    const el = document.getElementById('n'+i);
+    names.push(el.value.trim() || '플레이어'+(i+1));
   }
   if (new Set(names).size !== names.length) { alert('이름이 중복됩니다!'); return; }
-  const unit = parseInt(document.getElementById('base-unit').value) || 100;
-
-  G.players = names;
-  G.baseUnit = unit;
-  G.balances = {};
-  G.rounds = [];
+  const unit = parseInt(document.getElementById('base-unit').value)||100;
+  G.players = names; G.baseUnit = unit; G.balances = {}; G.rounds = [];
   names.forEach(n => G.balances[n] = 0);
-
-  save();
-  renderGame();
-  showScreen('game');
+  save(); renderGame(); showScreen('game');
 }
 
-// ────────────────────────────────────────
-// GAME SCREEN
-// ────────────────────────────────────────
+// ── GAME ──
 function renderGame() {
-  document.getElementById('game-sub').textContent =
-    G.rounds.length + '판 진행 중 • 단위: ' + fmt(G.baseUnit);
-  renderGrid();
-  renderHistory();
+  document.getElementById('game-meta').textContent =
+    G.rounds.length + '판 진행 중 · 단위 ' + fmt(G.baseUnit);
+  renderGrid(); renderHistory();
 }
 
 function renderGrid() {
   const grid = document.getElementById('player-grid');
   grid.innerHTML = '';
-  const sorted = [...G.players].sort((a,b) => G.balances[b] - G.balances[a]);
+  const rank = [...G.players].sort((a,b) => G.balances[b]-G.balances[a]);
   G.players.forEach(p => {
     const bal = G.balances[p];
-    const wins = G.rounds.filter(r => r.winner === p).length;
-    const rank = sorted.indexOf(p);
-    const card = document.createElement('div');
-    card.className = 'player-card' + (rank === 0 ? ' top' : rank === sorted.length-1 && bal < 0 ? ' bottom' : '');
-    card.innerHTML =
+    const r = rank.indexOf(p);
+    const isTop = r === 0 && bal > 0;
+    const isLast = r === G.players.length-1 && bal < 0;
+    const wins = G.rounds.filter(x => x.winner === p).length;
+    const d = document.createElement('div');
+    d.className = 'p-card' + (isTop ? ' rank1' : isLast ? ' last' : '');
+    d.innerHTML =
+      '<div class="p-rank">' + (MEDALS[r]||'') + '</div>' +
       '<div class="p-name">' + esc(p) + '</div>' +
-      '<div class="p-bal ' + (bal > 0 ? 'bal-pos' : bal < 0 ? 'bal-neg' : 'bal-zero') + '">' +
-        (bal > 0 ? '+' : '') + fmt(bal) +
+      '<div class="p-balance ' + (bal>0?'pos':bal<0?'neg':'zero') + '">' +
+        (bal>0?'+':'') + fmt(bal) +
       '</div>' +
-      '<div class="p-meta">' + wins + '승</div>';
-    grid.appendChild(card);
+      '<div class="p-wins">' + wins + '승</div>';
+    grid.appendChild(d);
   });
 }
 
 function renderHistory() {
-  const c = document.getElementById('round-list');
-  if (G.rounds.length === 0) {
-    c.innerHTML = '<div class="empty"><div class="icon">🎴</div><div>아직 진행한 판이 없습니다</div><div style="font-size:12px;margin-top:4px;">+ 버튼을 눌러 점수를 입력하세요</div></div>';
+  const c = document.getElementById('history-card');
+  if (!G.rounds.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🎴</div><div class="empty-title">아직 기록이 없습니다</div><div class="empty-sub">+ 버튼을 눌러 점수를 입력하세요</div></div>';
     return;
   }
-  c.innerHTML = '';
-  [...G.rounds].reverse().forEach((r, ri) => {
-    const idx = G.rounds.length - ri;
-    const tags = [];
-    if (r.go > 0) tags.push('<span class="tag tag-go">고 ' + r.go + '번</span>');
-    if (r.shake) tags.push('<span class="tag tag-sp">흔들기</span>');
-    if (r.bomb) tags.push('<span class="tag tag-sp">폭탄</span>');
-
-    const loserStr = r.losers.map(l => {
-      const bads = [];
-      if (l.pibak) bads.push('피박');
-      if (l.gwangbak) bads.push('광박');
-      return esc(l.name) + ' -' + fmt(l.amount) + (bads.length ? ' <span class="tag tag-bad">' + bads.join('·') + '</span>' : '');
-    }).join('  ');
-
-    const div = document.createElement('div');
-    div.className = 'round-item';
-    div.innerHTML =
-      '<div class="round-header">' +
-        '<span class="round-num">' + idx + '판</span>' +
-        '<span class="round-winner">🏆 ' + esc(r.winner) + ' +' + fmt(r.winAmount) + '</span>' +
-      '</div>' +
-      '<div class="round-detail">' + r.score + '점 ' + tags.join('') + '</div>' +
-      '<div class="round-detail" style="margin-top:3px;">' + loserStr + '</div>';
-    c.appendChild(div);
-  });
+  c.innerHTML = '<div style="padding:4px 0">' +
+    [...G.rounds].reverse().map((r, ri) => {
+      const idx = G.rounds.length - ri;
+      const tags = [];
+      if (r.go > 0) tags.push('<span class="tag tag-go">고 ' + r.go + '번</span>');
+      if (r.shake) tags.push('<span class="tag tag-sp">흔들기</span>');
+      if (r.bomb) tags.push('<span class="tag tag-sp">폭탄</span>');
+      const wi = G.players.indexOf(r.winner);
+      const loserStr = r.losers.map(l => {
+        const li = G.players.indexOf(l.name);
+        const bads = [];
+        if (l.pibak) bads.push('피박');
+        if (l.gwangbak) bads.push('광박');
+        return '<span style="color:var(--muted2)">' + esc(l.name) + ' <span style="color:var(--red)">-' + fmt(l.amount) + '</span>' +
+          (bads.length ? ' <span class="tag tag-bad">' + bads.join('·') + '</span>' : '') + '</span>';
+      }).join('  ');
+      return '<div class="round-item slide-up">' +
+        '<div class="round-num-badge">' + idx + '</div>' +
+        '<div class="round-content">' +
+          '<div class="round-winner-row">' +
+            '<span class="round-winner-name">' + MEDALS[0] + ' ' + esc(r.winner) + '</span>' +
+            '<span class="round-win-amount">+' + fmt(r.winAmount) + '</span>' +
+          '</div>' +
+          (tags.length ? '<div class="round-tags">' + tags.join('') + '</div>' : '') +
+          '<div class="round-losers">' + loserStr + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>';
 }
 
-// ────────────────────────────────────────
-// UNDO
-// ────────────────────────────────────────
+// ── UNDO ──
 function undoRound() {
-  if (G.rounds.length === 0) { alert('취소할 판이 없습니다.'); return; }
-  if (!confirm('마지막 판을 취소하시겠습니까?')) return;
+  if (!G.rounds.length) { alert('취소할 판이 없습니다.'); return; }
+  if (!confirm('마지막 판을 취소할까요?')) return;
   const r = G.rounds.pop();
   G.balances[r.winner] -= r.winAmount;
   r.losers.forEach(l => G.balances[l.name] += l.amount);
-  save();
-  renderGame();
+  save(); renderGame();
 }
 
-// ────────────────────────────────────────
-// MODAL
-// ────────────────────────────────────────
+// ── MODAL ──
 function openModal() {
-  M = { winner: null, score: 3, go: 0, shake: false, bomb: false, loser: {} };
-  G.players.forEach(p => M.loser[p] = { pibak: false, gwangbak: false });
+  M = { winner:null, score:3, go:0, shake:false, bomb:false, loser:{} };
+  G.players.forEach(p => M.loser[p] = { pibak:false, gwangbak:false });
 
-  // Winner buttons
-  const sel = document.getElementById('winner-sel');
-  sel.innerHTML = '';
-  G.players.forEach(p => {
+  const grid = document.getElementById('winner-grid');
+  grid.className = 'winner-grid p' + G.players.length;
+  grid.innerHTML = '';
+  G.players.forEach((p, i) => {
     const b = document.createElement('button');
-    b.className = 'player-btn';
-    b.textContent = p;
-    b.dataset.player = p;
+    b.className = 'winner-btn'; b.dataset.p = p;
+    b.innerHTML = '<span class="wbadge">' + INITIALS(p) + '</span>' + esc(p);
     b.addEventListener('click', () => pickWinner(p));
-    sel.appendChild(b);
+    grid.appendChild(b);
   });
 
-  updateScoreDisplay();
-  updateGoDisplay();
+  syncScore(); syncGo();
   document.getElementById('sw-shake').className = 'switch';
   document.getElementById('sw-bomb').className = 'switch';
   document.getElementById('loser-section').style.display = 'none';
   document.getElementById('preview').style.display = 'none';
-
-  document.getElementById('modal-overlay').classList.add('open');
   document.getElementById('modal-sheet').scrollTop = 0;
+  document.getElementById('modal-overlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
 document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
@@ -602,121 +929,122 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 
 function pickWinner(p) {
   M.winner = p;
-  document.querySelectorAll('#winner-sel .player-btn').forEach(b => {
-    b.classList.toggle('sel', b.dataset.player === p);
-  });
-  renderLoserRules();
-  updatePreview();
+  document.querySelectorAll('.winner-btn').forEach(b => b.classList.toggle('sel', b.dataset.p === p));
+  renderLoserRules(); updatePreview();
 }
 
-// Score stepper
-document.getElementById('score-minus').addEventListener('click', () => { M.score = Math.max(3, M.score - 1); updateScoreDisplay(); updatePreview(); });
-document.getElementById('score-plus').addEventListener('click', () => { M.score = Math.min(20, M.score + 1); updateScoreDisplay(); updatePreview(); });
-function updateScoreDisplay() {
+// Score
+document.getElementById('score-minus').onclick = () => { M.score = Math.max(3, M.score-1); syncScore(); updatePreview(); };
+document.getElementById('score-plus').onclick = () => { M.score = Math.min(20, M.score+1); syncScore(); updatePreview(); };
+function syncScore() {
   document.getElementById('score-val').textContent = M.score;
-  document.getElementById('score-units').textContent = M.score - 2;
+  document.getElementById('score-badge').textContent = '= ' + (M.score-2) + '단위';
 }
 
-// Go stepper
-document.getElementById('go-minus').addEventListener('click', () => { M.go = Math.max(0, M.go - 1); updateGoDisplay(); updatePreview(); });
-document.getElementById('go-plus').addEventListener('click', () => { M.go = Math.min(10, M.go + 1); updateGoDisplay(); updatePreview(); });
-function updateGoDisplay() {
+// Go
+document.getElementById('go-minus').onclick = () => { M.go = Math.max(0, M.go-1); syncGo(); updatePreview(); };
+document.getElementById('go-plus').onclick = () => { M.go = Math.min(10, M.go+1); syncGo(); updatePreview(); };
+function syncGo() {
   document.getElementById('go-val').textContent = M.go;
-  document.getElementById('go-mult').textContent = '×' + (M.go + 1);
+  document.getElementById('go-badge').textContent = '×' + (M.go+1) + ' 배율';
 }
 
-// Toggle switches
-document.getElementById('row-shake').addEventListener('click', () => {
+// Toggles
+document.getElementById('row-shake').onclick = () => {
   M.shake = !M.shake;
-  document.getElementById('sw-shake').className = 'switch' + (M.shake ? ' on' : '');
+  document.getElementById('sw-shake').className = 'switch' + (M.shake?' on':'');
   updatePreview();
-});
-document.getElementById('row-bomb').addEventListener('click', () => {
+};
+document.getElementById('row-bomb').onclick = () => {
   M.bomb = !M.bomb;
-  document.getElementById('sw-bomb').className = 'switch' + (M.bomb ? ' on' : '');
+  document.getElementById('sw-bomb').className = 'switch' + (M.bomb?' on':'');
   updatePreview();
-});
+};
 
 // Loser rules
 function renderLoserRules() {
   const sec = document.getElementById('loser-section');
   const con = document.getElementById('loser-container');
-  if (!M.winner) { sec.style.display = 'none'; return; }
+  if (!M.winner) { sec.style.display='none'; return; }
   sec.style.display = 'block';
   con.innerHTML = '';
-
-  G.players.filter(p => p !== M.winner).forEach(loser => {
-    const box = document.createElement('div');
-    box.className = 'loser-box';
-    box.innerHTML =
-      '<div class="loser-title">❌ ' + esc(loser) + '</div>' +
-      '<div class="loser-row" data-loser="' + loser + '" data-rule="pibak">' +
-        '<div class="checkbox' + (M.loser[loser].pibak ? ' on' : '') + '"></div>' +
-        '<div><div class="loser-row-label">피박</div><div class="loser-row-sub">피 0장 → ×2배</div></div>' +
+  G.players.filter(p => p !== M.winner).forEach((loser, i) => {
+    const li = G.players.indexOf(loser);
+    const block = document.createElement('div');
+    block.className = 'loser-block';
+    block.innerHTML =
+      '<div class="loser-name-row">' +
+        '<div class="loser-avatar ' + AV[li] + '">' + INITIALS(loser) + '</div>' +
+        '<div class="loser-name">' + esc(loser) + '</div>' +
       '</div>' +
-      '<div class="loser-row" data-loser="' + loser + '" data-rule="gwangbak">' +
-        '<div class="checkbox' + (M.loser[loser].gwangbak ? ' on' : '') + '"></div>' +
-        '<div><div class="loser-row-label">광박</div><div class="loser-row-sub">광 0장 → ×2배</div></div>' +
+      '<div class="loser-check-row" data-r="pibak">' +
+        '<div class="checkbox' + (M.loser[loser].pibak?' on':'') + '"></div>' +
+        '<div><div class="check-label">피박</div><div class="check-sub">피 0장 → ×2배</div></div>' +
+      '</div>' +
+      '<div class="loser-check-row" data-r="gwangbak">' +
+        '<div class="checkbox' + (M.loser[loser].gwangbak?' on':'') + '"></div>' +
+        '<div><div class="check-label">광박</div><div class="check-sub">광 0장 → ×2배</div></div>' +
       '</div>';
-
-    box.querySelectorAll('.loser-row').forEach(row => {
+    block.querySelectorAll('.loser-check-row').forEach(row => {
       row.addEventListener('click', () => {
-        const l = row.dataset.loser, r = row.dataset.rule;
-        M.loser[l][r] = !M.loser[l][r];
-        row.querySelector('.checkbox').className = 'checkbox' + (M.loser[l][r] ? ' on' : '');
+        const rule = row.dataset.r;
+        M.loser[loser][rule] = !M.loser[loser][rule];
+        row.querySelector('.checkbox').className = 'checkbox' + (M.loser[loser][rule]?' on':'');
         updatePreview();
       });
     });
-    con.appendChild(box);
+    con.appendChild(block);
   });
 }
 
-// Preview
+// Calc & Preview
 function calcRound() {
   if (!M.winner) return null;
   const base = (M.score - 2) * G.baseUnit;
-  const mult = (M.go + 1) * (M.shake ? 2 : 1) * (M.bomb ? 2 : 1);
+  const mult = (M.go+1) * (M.shake?2:1) * (M.bomb?2:1);
   const losers = G.players.filter(p => p !== M.winner).map(name => {
     let amt = base * mult;
-    if (M.loser[name].pibak)   amt *= 2;
+    if (M.loser[name].pibak)    amt *= 2;
     if (M.loser[name].gwangbak) amt *= 2;
-    return { name, amount: amt, pibak: M.loser[name].pibak, gwangbak: M.loser[name].gwangbak };
+    return { name, amount:amt, pibak:M.loser[name].pibak, gwangbak:M.loser[name].gwangbak };
   });
-  return { winner: M.winner, score: M.score, go: M.go, shake: M.shake, bomb: M.bomb, losers, winAmount: losers.reduce((s,l) => s + l.amount, 0), mult };
+  return {
+    winner:M.winner, score:M.score, go:M.go, shake:M.shake, bomb:M.bomb,
+    losers, winAmount:losers.reduce((s,l)=>s+l.amount,0), mult
+  };
 }
 
 function updatePreview() {
   const r = calcRound();
   const box = document.getElementById('preview');
-  if (!r) { box.style.display = 'none'; return; }
+  if (!r) { box.style.display='none'; return; }
   box.style.display = 'block';
-
   const parts = [];
-  if (r.go > 0) parts.push('고×' + (r.go+1));
+  if (r.go>0) parts.push('고×'+(r.go+1));
   if (r.shake) parts.push('흔들기×2');
   if (r.bomb)  parts.push('폭탄×2');
-
-  let html = '<div class="preview-row"><span>기본 ' + r.score + '점</span><span>' + fmt((r.score-2)*G.baseUnit) + '</span></div>';
-  if (r.mult > 1) html += '<div class="preview-row"><span>배율 ' + parts.join(' × ') + '</span><span>×' + r.mult + '</span></div>';
-  html += '<div class="preview-divider"></div>';
+  let html =
+    '<div class="prow"><span class="prow-muted">기본 ' + r.score + '점</span><span>' + fmt((r.score-2)*G.baseUnit) + '</span></div>';
+  if (r.mult > 1)
+    html += '<div class="prow"><span class="prow-muted">배율 (' + parts.join('·') + ')</span><span>×' + r.mult + '</span></div>';
+  html += '<div class="pdivider"></div>';
   r.losers.forEach(l => {
     const bads = [];
     if (l.pibak) bads.push('피박');
     if (l.gwangbak) bads.push('광박');
-    html += '<div class="preview-row">' +
-      '<span>' + esc(l.name) + (bads.length ? ' <span style="font-size:11px;color:var(--red);">(' + bads.join('·') + ')</span>' : '') + '</span>' +
-      '<span class="amt-loss">-' + fmt(l.amount) + '</span>' +
-    '</div>';
+    html += '<div class="prow"><span>' + esc(l.name) +
+      (bads.length ? ' <span style="color:var(--red);font-size:11px">(' + bads.join('·') + ')</span>' : '') +
+      '</span><span class="amt-loss">−' + fmt(l.amount) + '</span></div>';
   });
-  html += '<div class="preview-total"><span>🏆 ' + esc(r.winner) + '</span><span class="amt-gain">+' + fmt(r.winAmount) + '</span></div>';
+  html += '<div class="ptotal"><span>🏆 ' + esc(r.winner) + '</span><span class="amt-gain">+' + fmt(r.winAmount) + '</span></div>';
   document.getElementById('preview-body').innerHTML = html;
 }
 
-// Confirm round
-document.getElementById('confirm-btn').addEventListener('click', () => {
+// Confirm
+document.getElementById('confirm-btn').onclick = () => {
   const r = calcRound();
   if (!r) {
-    const el = document.getElementById('winner-sel');
+    const el = document.getElementById('winner-grid');
     el.classList.add('shake');
     setTimeout(() => el.classList.remove('shake'), 300);
     return;
@@ -724,41 +1052,69 @@ document.getElementById('confirm-btn').addEventListener('click', () => {
   G.balances[r.winner] += r.winAmount;
   r.losers.forEach(l => G.balances[l.name] -= l.amount);
   G.rounds.push(r);
-  save();
-  closeModal();
-  renderGame();
-});
+  save(); closeModal(); renderGame();
+};
 
-// ────────────────────────────────────────
-// SETTLEMENT
-// ────────────────────────────────────────
+// ── SETTLEMENT ──
 function showSettlement() {
-  if (G.rounds.length === 0) { alert('아직 진행한 판이 없습니다!'); return; }
+  if (!G.rounds.length) { alert('아직 진행한 판이 없습니다!'); return; }
+  document.getElementById('settle-meta').textContent = '총 ' + G.rounds.length + '판 · 단위 ' + fmt(G.baseUnit);
 
-  document.getElementById('settle-sub').textContent = '총 ' + G.rounds.length + '판 • 단위: ' + fmt(G.baseUnit);
+  // Podium
+  const sorted = [...G.players].sort((a,b) => G.balances[b]-G.balances[a]);
+  let podiumOrder;
+  if (sorted.length === 4) podiumOrder = [sorted[1],sorted[0],sorted[2],sorted[3]];
+  else if (sorted.length === 3) podiumOrder = [sorted[1],sorted[0],sorted[2]];
+  else podiumOrder = sorted;
 
-  const sorted = [...G.players].sort((a,b) => G.balances[b] - G.balances[a]);
-  document.getElementById('settle-players').innerHTML = sorted.map(p => {
-    const bal = G.balances[p];
-    const wins = G.rounds.filter(r => r.winner === p).length;
-    return '<div class="settle-row">' +
-      '<div><div class="settle-name">' + esc(p) + '</div><div class="settle-meta">' + wins + '승</div></div>' +
-      '<div class="settle-amt ' + (bal > 0 ? 'bal-pos' : bal < 0 ? 'bal-neg' : 'bal-zero') + '">' +
-        (bal > 0 ? '+' : '') + fmt(bal) +
-      '</div></div>';
-  }).join('');
+  const podiumHeights = {[sorted[0]]:'p1',[sorted[1]]:'p2'};
+  if (sorted[2]) podiumHeights[sorted[2]] = 'p3';
+  if (sorted[3]) podiumHeights[sorted[3]] = 'p4';
 
+  document.getElementById('podium-wrap').innerHTML =
+    '<div class="podium">' +
+    podiumOrder.map((p, i) => {
+      const bal = G.balances[p];
+      const rank = sorted.indexOf(p);
+      const cls = podiumHeights[p];
+      return '<div class="podium-item">' +
+        '<div class="podium-medal">' + (MEDALS[rank]||'😐') + '</div>' +
+        '<div class="podium-bar ' + cls + '">' +
+          '<div class="podium-name">' + esc(p) + '</div>' +
+          '<div class="podium-amount ' + (bal>0?'amt-gain':bal<0?'amt-loss':'') + '">' + (bal>0?'+':'') + fmt(bal) + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>';
+
+  // Result list
+  document.getElementById('result-list').innerHTML =
+    sorted.map((p, i) => {
+      const bal = G.balances[p];
+      const wins = G.rounds.filter(r => r.winner===p).length;
+      const pi = G.players.indexOf(p);
+      return '<div class="result-item">' +
+        '<div class="result-avatar ' + AV[pi] + '">' + INITIALS(p) + '</div>' +
+        '<div class="result-info">' +
+          '<div class="result-name">' + MEDALS[i] + ' ' + esc(p) + '</div>' +
+          '<div class="result-wins">' + wins + '승</div>' +
+        '</div>' +
+        '<div class="result-bal ' + (bal>0?'amt-gain':bal<0?'amt-loss':'') + '">' + (bal>0?'+':'') + fmt(bal) + '</div>' +
+      '</div>';
+    }).join('');
+
+  // Transfers
   const transfers = getTransfers();
-  const tc = document.getElementById('settle-transfers');
-  if (transfers.length === 0) {
-    tc.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:12px 0;">정산할 금액이 없습니다 🎉</div>';
+  const tl = document.getElementById('transfer-list');
+  if (!transfers.length) {
+    tl.innerHTML = '<div style="color:var(--muted2);font-size:14px;padding:12px 0;text-align:center">🎉 정산할 금액이 없습니다</div>';
   } else {
-    tc.innerHTML = transfers.map(t =>
-      '<div class="transfer-card">' +
-        '<div class="tf-from">' + esc(t.from) + '</div>' +
+    tl.innerHTML = transfers.map(t =>
+      '<div class="transfer-item">' +
+        '<div class="tf-from-badge">' + esc(t.from) + '</div>' +
         '<div class="tf-arrow">→</div>' +
-        '<div class="tf-to">' + esc(t.to) + '</div>' +
-        '<div class="tf-amt">' + fmt(t.amount) + '</div>' +
+        '<div class="tf-to-badge">' + esc(t.to) + '</div>' +
+        '<div class="tf-amount">' + fmt(t.amount) + '</div>' +
       '</div>'
     ).join('');
   }
@@ -767,124 +1123,82 @@ function showSettlement() {
 }
 
 function getTransfers() {
-  const creds = [], debts = [];
-  Object.entries(G.balances).forEach(([name, bal]) => {
-    if (bal > 0) creds.push({ name, amount: bal });
-    else if (bal < 0) debts.push({ name, amount: -bal });
+  const creds=[], debts=[];
+  Object.entries(G.balances).forEach(([n,b]) => {
+    if (b>0) creds.push({name:n,amount:b});
+    else if (b<0) debts.push({name:n,amount:-b});
   });
-  creds.sort((a,b) => b.amount - a.amount);
-  debts.sort((a,b) => b.amount - a.amount);
-
-  const result = [];
-  let ci = 0, di = 0;
-  while (ci < creds.length && di < debts.length) {
+  creds.sort((a,b)=>b.amount-a.amount);
+  debts.sort((a,b)=>b.amount-a.amount);
+  const res=[]; let ci=0,di=0;
+  while (ci<creds.length && di<debts.length) {
     const amt = Math.min(creds[ci].amount, debts[di].amount);
-    result.push({ from: debts[di].name, to: creds[ci].name, amount: amt });
-    creds[ci].amount -= amt;
-    debts[di].amount -= amt;
-    if (creds[ci].amount === 0) ci++;
-    if (debts[di].amount === 0) di++;
+    res.push({from:debts[di].name, to:creds[ci].name, amount:amt});
+    creds[ci].amount-=amt; debts[di].amount-=amt;
+    if (!creds[ci].amount) ci++;
+    if (!debts[di].amount) di++;
   }
-  return result;
+  return res;
 }
 
-// ────────────────────────────────────────
-// SHARE
-// ────────────────────────────────────────
+// ── SHARE ──
 function shareResult() {
+  const sorted = [...G.players].sort((a,b)=>G.balances[b]-G.balances[a]);
   const transfers = getTransfers();
-  const sorted = [...G.players].sort((a,b) => G.balances[b] - G.balances[a]);
-  const lines = ['🀄 고스톱 최종 정산', '총 ' + G.rounds.length + '판 | 단위 ' + fmt(G.baseUnit), ''];
-
-  sorted.forEach(p => {
-    const bal = G.balances[p];
-    const wins = G.rounds.filter(r => r.winner === p).length;
-    lines.push((bal > 0 ? '🏆' : bal < 0 ? '😢' : '➖') + ' ' + p + ': ' + (bal > 0 ? '+' : '') + fmt(bal) + ' (' + wins + '승)');
+  const lines = ['🀄 고스톱 최종 정산', '총 '+G.rounds.length+'판 | 단위 '+fmt(G.baseUnit), ''];
+  sorted.forEach((p,i) => {
+    const b = G.balances[p];
+    const w = G.rounds.filter(r=>r.winner===p).length;
+    lines.push(MEDALS[i]+' '+p+': '+(b>0?'+':'')+fmt(b)+' ('+w+'승)');
   });
-
-  lines.push('');
-  lines.push('💸 정산:');
-  if (transfers.length === 0) {
-    lines.push('정산 없음');
-  } else {
-    transfers.forEach(t => lines.push(t.from + ' → ' + t.to + ': ' + fmt(t.amount)));
-  }
-
+  lines.push('', '💸 정산:');
+  transfers.length ? transfers.forEach(t => lines.push(t.from+' → '+t.to+': '+fmt(t.amount))) : lines.push('정산 없음');
   const text = lines.join('\n');
-
   if (navigator.share) {
-    navigator.share({ title: '고스톱 정산', text }).catch(() => copyText(text));
-  } else {
-    copyText(text);
-  }
+    navigator.share({title:'고스톱 정산', text}).catch(()=>copy(text));
+  } else { copy(text); }
 }
 
-function copyText(text) {
+function copy(text) {
   if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(() => alert('클립보드에 복사됐습니다!\n카카오톡에 붙여넣기 하세요 😊'));
+    navigator.clipboard.writeText(text).then(()=>alert('클립보드에 복사됐습니다!\n카카오톡에 붙여넣기 하세요 😊'));
   } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;top:-9999px;';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.cssText='position:fixed;top:-9999px;';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
     document.body.removeChild(ta);
     alert('클립보드에 복사됐습니다!\n카카오톡에 붙여넣기 하세요 😊');
   }
 }
 
-// ────────────────────────────────────────
-// UTILS
-// ────────────────────────────────────────
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  window.scrollTo(0, 0);
+// ── UTILS ──
+function showScreen(s) {
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  window.scrollTo(0,0);
 }
-
 function confirmReset() {
-  if (G.rounds.length > 0 && !confirm('현재 게임을 종료하고 새 게임을 시작하시겠습니까?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  G.players = []; G.balances = {}; G.rounds = [];
-  renderNameInputs();
-  showScreen('setup');
+  if (G.rounds.length && !confirm('현재 게임을 종료하고 새 게임을 시작할까요?')) return;
+  localStorage.removeItem(SAVE_KEY);
+  G={playerCount:G.playerCount,players:[],baseUnit:G.baseUnit,balances:{},rounds:[]};
+  renderNameList(); showScreen('setup');
 }
+function fmt(n) { return n.toLocaleString('ko-KR')+'원'; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function fmt(n) {
-  return n.toLocaleString('ko-KR') + '원';
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ────────────────────────────────────────
-// PERSISTENCE
-// ────────────────────────────────────────
-function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(G)); } catch(e) {}
-}
-
+// ── PERSISTENCE ──
+function save() { try { localStorage.setItem(SAVE_KEY,JSON.stringify(G)); } catch(e){} }
 function load() {
   try {
-    const d = localStorage.getItem(STORAGE_KEY);
+    const d = localStorage.getItem(SAVE_KEY);
     if (d) {
-      const parsed = JSON.parse(d);
-      if (parsed.players && parsed.players.length > 0) {
-        G = parsed;
-        renderGame();
-        showScreen('game');
-        return;
-      }
+      const p = JSON.parse(d);
+      if (p.players?.length) { G=p; renderGame(); showScreen('game'); return; }
     }
   } catch(e) {}
   setCount(3);
 }
 
-// ────────────────────────────────────────
-// INIT
-// ────────────────────────────────────────
 load();
 </script>
 </body>
