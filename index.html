@@ -766,11 +766,11 @@ body::before{
         </svg>
       </div>
       <h1>진관동 타짜들 고스톱 계산기</h1>
-      <p>가족과 함께라 더 재밌는 🀄</p>
+      <p>진관동 타짜들 점수 계산기</p>
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">몇 명이서 치세요?</div>
+      <div class="section-label">인원 수</div>
       <div class="count-toggle" id="count-toggle">
         <button class="count-btn active" data-n="3" onclick="setCount(3)">
           3<span>명</span>
@@ -782,12 +782,12 @@ body::before{
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">참가자 이름</div>
+      <div class="section-label">플레이어 이름</div>
       <div class="name-list" id="name-list"></div>
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">판돈 — 1단위에 얼마예요?</div>
+      <div class="section-label">기본 단위 (판돈)</div>
       <div class="unit-row">
         <span class="unit-prefix">₩</span>
         <input class="unit-input" type="number" id="base-unit" value="100" min="10" step="10" inputmode="numeric">
@@ -976,8 +976,8 @@ body::before{
   </button>
 
   <div class="bottom-bar">
-    <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 마지막판 취소</button>
-    <button class="btn-bar btn-bar-sm" onclick="confirmReset()">새 게임</button>
+    <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 취소</button>
+    <button class="btn-bar btn-bar-sm" onclick="confirmReset()">새게임</button>
     <button class="btn-bar btn-bar-main" onclick="showSettlement()">💰 최종 정산</button>
   </div>
 </div>
@@ -1007,7 +1007,7 @@ body::before{
       <button class="btn-share" onclick="shareResult()">📤 결과 공유하기</button>
       <button class="btn-new" onclick="confirmReset()">🎴 한 판 더!</button>
       <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.2);margin-top:24px;line-height:1.6;">
-  아부지 어머니 동생 재밌게 치세요 😊<br>아들이 만들었어요 ❤️
+  재밌게 치슈~ 우씨가 만듦 ❤️
 </p>
     </div>
   </div>
@@ -1021,13 +1021,13 @@ body::before{
 
     <!-- Winner -->
     <div class="m-section">
-      <div class="m-label">누가 이겼어요? 🏆</div>
+      <div class="m-label">누가 이겼음요? 🏆</div>
       <div class="winner-grid" id="winner-grid"></div>
     </div>
 
     <!-- Score -->
     <div class="m-section">
-      <div class="m-label">점수가 몇 점이에요?</div>
+      <div class="m-label">점수가 몇점??</div>
       <div class="stepper-box">
         <button class="step-btn" id="score-minus">−</button>
         <div class="step-center">
@@ -1041,7 +1041,7 @@ body::before{
 
     <!-- Go -->
     <div class="m-section">
-      <div class="m-label">고(GO) 몇 번 했어요?</div>
+      <div class="m-label">고 몇번??</div>
       <div class="stepper-box">
         <button class="step-btn" id="go-minus">−</button>
         <div class="step-center">
