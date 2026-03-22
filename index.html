@@ -893,9 +893,9 @@ body::before{
         <div class="help-row">
           <div class="help-row-left">
             <div class="help-row-name">폭탄</div>
-            <div class="help-row-desc">같은 달 카드 4장이면 선언하슈. 전체 4배됨다</div>
+            <div class="help-row-desc">같은 달 카드 4장이면 선언하슈. 전체 2배됨다</div>
           </div>
-          <div class="help-badge badge-blue">× 4배</div>
+          <div class="help-badge badge-blue">× 2배</div>
         </div>
         <div class="help-row">
           <div class="help-row-left">
@@ -1246,9 +1246,13 @@ function openModal() {
   document.getElementById('preview').style.display = 'none';
   document.getElementById('modal-sheet').scrollTop = 0;
   document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
@@ -1265,7 +1269,8 @@ document.getElementById('score-minus').onclick = () => { M.score = Math.max(3, M
 document.getElementById('score-plus').onclick = () => { M.score = Math.min(20, M.score+1); syncScore(); updatePreview(); };
 function syncScore() {
   document.getElementById('score-val').textContent = M.score;
-  document.getElementById('score-badge').textContent = '= ' + (M.score-2) + '단위';
+  const units = Math.max(1, M.score - 2);
+  document.getElementById('score-badge').textContent = '= ' + units + '단위';
 }
 
 // Go
@@ -1483,18 +1488,29 @@ function shareResult() {
   const text = lines.join('\n');
   if (navigator.share) {
     navigator.share({title:'고스톱 정산', text}).catch(()=>copy(text));
-  } else { copy(text); }
+  } else {
+    copy(text);
+  }
 }
 
 function copy(text) {
   if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(()=>alert('복사됐슈!\n카카오톡에 붙여넣기 하슈 😊'));
+    navigator.clipboard.writeText(text)
+      .then(()=>alert('복사됐슈!\n카카오톡에 붙여넣기 하슈 😊'))
+      .catch(()=>copyFallback(text));
   } else {
+    copyFallback(text);
+  }
+}
+function copyFallback(text) {
+  try {
     const ta=document.createElement('textarea');
-    ta.value=text; ta.style.cssText='position:fixed;top:-9999px;';
+    ta.value=text; ta.style.cssText='position:fixed;top:-9999px;left:-9999px;';
     document.body.appendChild(ta); ta.select(); document.execCommand('copy');
     document.body.removeChild(ta);
     alert('복사됐슈!\n카카오톡에 붙여넣기 하슈 😊');
+  } catch(e) {
+    alert('복사가 안 됐슈 😅\n직접 선택해서 복사해주슈!');
   }
 }
 
