@@ -593,79 +593,43 @@ body::before{
   <div class="setup-wrap">
     <div class="hero">
       <div class="hero-icon">
-        <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- 그림자 -->
-          <ellipse cx="29" cy="53" rx="18" ry="3.5" fill="rgba(0,0,0,0.45)"/>
-
-          <!-- 왼쪽 카드 뒷면 (빨강 화투 뒷면) -->
-          <g transform="rotate(-20 29 29)">
-            <rect x="3" y="11" width="22" height="33" rx="3.5" fill="#c41e3a"/>
-            <rect x="5" y="13" width="18" height="29" rx="2.5" fill="none" stroke="rgba(255,200,200,0.25)" stroke-width="0.8"/>
-            <!-- 뒷면 원형 패턴 -->
-            <circle cx="14" cy="27.5" r="5" fill="none" stroke="rgba(255,200,200,0.3)" stroke-width="0.9"/>
-            <circle cx="14" cy="27.5" r="2" fill="rgba(255,200,200,0.2)"/>
-            <line x1="14" y1="22.5" x2="14" y2="19" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="14" y1="32.5" x2="14" y2="36" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="9" y1="27.5" x2="5.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="19" y1="27.5" x2="22.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-          </g>
-
-          <!-- 오른쪽 카드 뒷면 -->
-          <g transform="rotate(20 29 29)">
-            <rect x="33" y="11" width="22" height="33" rx="3.5" fill="#c41e3a"/>
-            <rect x="35" y="13" width="18" height="29" rx="2.5" fill="none" stroke="rgba(255,200,200,0.25)" stroke-width="0.8"/>
-            <circle cx="44" cy="27.5" r="5" fill="none" stroke="rgba(255,200,200,0.3)" stroke-width="0.9"/>
-            <circle cx="44" cy="27.5" r="2" fill="rgba(255,200,200,0.2)"/>
-            <line x1="44" y1="22.5" x2="44" y2="19" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="44" y1="32.5" x2="44" y2="36" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="39" y1="27.5" x2="35.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-            <line x1="49" y1="27.5" x2="52.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
-          </g>
-
-          <!-- 앞 카드: 8월 공산(芒) 광 — 달·억새 -->
-          <!-- 카드 몸통 -->
-          <rect x="17" y="8" width="24" height="38" rx="4" fill="#111827"/>
-          <rect x="17" y="8" width="24" height="38" rx="4" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
-
-          <!-- 하늘 그라디언트 느낌 -->
-          <rect x="17" y="8" width="24" height="20" rx="4" fill="url(#skyGrad)"/>
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0c1a3a"/>
-              <stop offset="100%" stop-color="#111827"/>
+            <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e11d48"/>
+              <stop offset="100%" stop-color="#9f1239"/>
             </linearGradient>
+            <linearGradient id="skyBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1e1035"/>
+              <stop offset="100%" stop-color="#2d1b4e"/>
+            </linearGradient>
+            <clipPath id="cardClip">
+              <rect x="9" y="6" width="42" height="48" rx="8"/>
+            </clipPath>
           </defs>
 
-          <!-- 달 -->
-          <circle cx="29" cy="20" r="8.5" fill="#fde68a" opacity="0.95"/>
-          <circle cx="29" cy="20" r="8.5" fill="none" stroke="#fbbf24" stroke-width="0.6"/>
-          <!-- 달 내부 무늬 (크레이터 느낌) -->
-          <circle cx="26.5" cy="18.5" r="1.3" fill="rgba(251,191,36,0.35)"/>
-          <circle cx="31" cy="22" r="0.9" fill="rgba(251,191,36,0.3)"/>
+          <!-- 카드 외곽 -->
+          <rect x="9" y="6" width="42" height="48" rx="8" fill="url(#cardBg)"/>
 
-          <!-- 억새풀 (pampas grass) -->
-          <line x1="21" y1="37" x2="19.5" y2="29" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="23" y1="37" x2="22" y2="28" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="26" y1="37" x2="25.5" y2="27.5" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="29" y1="37" x2="30" y2="27.5" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="32" y1="37" x2="33.5" y2="28" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="35" y1="37" x2="36.5" y2="29" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- 풀잎 끝 흔들림 -->
-          <line x1="19.5" y1="29" x2="18.5" y2="27" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
-          <line x1="22" y1="28" x2="21.5" y2="26.5" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
-          <line x1="25.5" y1="27.5" x2="26.5" y2="26" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
-          <line x1="30" y1="27.5" x2="31.5" y2="26" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
-          <line x1="33.5" y1="28" x2="35" y2="26.5" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
-          <line x1="36.5" y1="29" x2="38" y2="27.5" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
+          <!-- 안쪽 클립 영역 -->
+          <g clip-path="url(#cardClip)">
+            <!-- 하늘 배경 -->
+            <rect x="9" y="6" width="42" height="38" fill="url(#skyBg)"/>
 
-          <!-- 하단 빨간 띠 (광 표시) -->
-          <rect x="17" y="37" width="24" height="9" rx="0 0 4 4" fill="#b91c1c"/>
-          <!-- 光 한자 -->
-          <text x="29" y="44.5" text-anchor="middle" fill="#fde68a" font-family="serif" font-size="7.5" font-weight="bold" letter-spacing="0.5">光</text>
+            <!-- 달 -->
+            <circle cx="30" cy="22" r="9" fill="white" opacity="0.95"/>
+
+            <!-- 산 실루엣 -->
+            <path d="M9 44 L20 28 L28 36 L36 22 L51 44 Z" fill="#0d0714"/>
+            <path d="M9 54 L9 42 L51 42 L51 54 Z" fill="#0d0714"/>
+          </g>
+
+          <!-- 카드 테두리 하이라이트 -->
+          <rect x="9" y="6" width="42" height="48" rx="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
         </svg>
       </div>
       <h1>고스톱 계산기</h1>
-      <p>가족과 함께하는 스마트 점수 계산</p>
+      <p>진관동 타짜들 게임판</p>
     </div>
 
     <div class="glass setup-card">
