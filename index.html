@@ -595,37 +595,33 @@ body::before{
       <div class="hero-icon">
         <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#e11d48"/>
-              <stop offset="100%" stop-color="#9f1239"/>
+            <linearGradient id="cBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f43f5e"/>
+              <stop offset="100%" stop-color="#be123c"/>
             </linearGradient>
-            <linearGradient id="skyBg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1e1035"/>
-              <stop offset="100%" stop-color="#2d1b4e"/>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1a0f2e"/>
+              <stop offset="100%" stop-color="#2a1545"/>
             </linearGradient>
-            <clipPath id="cardClip">
-              <rect x="9" y="6" width="42" height="48" rx="8"/>
+            <clipPath id="ic">
+              <rect x="13" y="11" width="34" height="37" rx="5"/>
             </clipPath>
           </defs>
 
-          <!-- 카드 외곽 -->
-          <rect x="9" y="6" width="42" height="48" rx="8" fill="url(#cardBg)"/>
+          <!-- 핑크 카드 외곽 (테두리로 보임) -->
+          <rect x="9" y="7" width="42" height="47" rx="9" fill="url(#cBg)"/>
 
-          <!-- 안쪽 클립 영역 -->
-          <g clip-path="url(#cardClip)">
-            <!-- 하늘 배경 -->
-            <rect x="9" y="6" width="42" height="38" fill="url(#skyBg)"/>
-
+          <!-- 안쪽 어두운 씬 (inset 4px → 핑크 테두리 살아남) -->
+          <g clip-path="url(#ic)">
+            <rect x="13" y="11" width="34" height="37" fill="url(#sky)"/>
             <!-- 달 -->
-            <circle cx="30" cy="22" r="9" fill="white" opacity="0.95"/>
-
+            <circle cx="30" cy="23" r="8.5" fill="white"/>
             <!-- 산 실루엣 -->
-            <path d="M9 44 L20 28 L28 36 L36 22 L51 44 Z" fill="#0d0714"/>
-            <path d="M9 54 L9 42 L51 42 L51 54 Z" fill="#0d0714"/>
+            <path d="M13 48 L22 32 L30 40 L38 26 L47 40 L47 48 Z" fill="#0a0618"/>
           </g>
 
           <!-- 카드 테두리 하이라이트 -->
-          <rect x="9" y="6" width="42" height="48" rx="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <rect x="9" y="7" width="42" height="47" rx="9" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
         </svg>
       </div>
       <h1>고스톱 계산기</h1>
