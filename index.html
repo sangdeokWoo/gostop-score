@@ -9,7 +9,7 @@
 <title>진관동 타짜들 고스톱 계산기</title>
 <!-- Open Graph / KakaoTalk 링크 미리보기 -->
 <meta property="og:type"        content="website">
-<meta property="og:title"       content="진관동 타짜들 고스톱 계산기 🀄">
+<meta property="og:title"       content="진관동 타짜들 고스톱 계산기 🎴">
 <meta property="og:description" content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 3~4인 지원. 판마다 점수 입력하면 최종 정산까지 바로 나옴다.">
 <meta property="og:url"         content="https://sangdeokwoo.github.io/gostop-score/">
 <meta property="og:image"       content="https://sangdeokwoo.github.io/gostop-score/og-image.svg">
@@ -795,7 +795,7 @@ body::before{
       </div>
     </div>
 
-    <button class="btn-start" onclick="startGame()">🀄 게임 시작!</button>
+    <button class="btn-start" onclick="startGame()">🎴 게임 시작!</button>
   </div>
 </div>
 
@@ -823,7 +823,7 @@ body::before{
 
       <!-- 기본 점수 -->
       <div class="help-section">
-        <div class="help-section-title"><span>🀄</span> 기본 점수 계산</div>
+        <div class="help-section-title"><span>🎴</span> 기본 점수 계산</div>
         <div class="help-row">
           <div class="help-row-left">
             <div class="help-row-name">3점</div>
@@ -1389,7 +1389,7 @@ document.getElementById('confirm-btn').onclick = () => {
 
 // ── SETTLEMENT ──
 function showSettlement() {
-  if (!G.rounds.length) { alert('아직 기록된 판이 없슈 🀄 먼저 한 판 하슈!'); return; }
+  if (!G.rounds.length) { alert('아직 기록된 판이 없슈 🎴 먼저 한 판 하슈!'); return; }
   document.getElementById('settle-meta').textContent = '총 ' + G.rounds.length + '판 · 단위 ' + fmt(G.baseUnit);
 
   // Podium
@@ -1477,7 +1477,7 @@ function getTransfers() {
 function shareResult() {
   const sorted = [...G.players].sort((a,b)=>G.balances[b]-G.balances[a]);
   const transfers = getTransfers();
-  const lines = ['🀄 고스톱 최종 정산', '총 '+G.rounds.length+'판 | 단위 '+fmt(G.baseUnit), ''];
+  const lines = ['🎴 고스톱 최종 정산', '총 '+G.rounds.length+'판 | 단위 '+fmt(G.baseUnit), ''];
   sorted.forEach((p,i) => {
     const b = G.balances[p];
     const w = G.rounds.filter(r=>r.winner===p).length;
