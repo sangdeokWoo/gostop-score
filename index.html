@@ -312,16 +312,18 @@ body::before{
 /* ── FAB ── */
 .fab{
   position:fixed;bottom:88px;right:20px;
-  width:60px;height:60px;
+  width:64px;
   background:linear-gradient(135deg,#1affa0,#00d48a);
-  border-radius:50%;border:none;
-  font-size:32px;color:#050f08;
+  border-radius:20px;border:none;
+  color:#050f08;
   cursor:pointer;
   box-shadow:0 6px 24px rgba(42,255,160,0.3);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 4px 7px;gap:1px;
   transition:all .2s;z-index:25;
-  font-weight:300;
 }
+.fab-icon{font-size:26px;font-weight:300;line-height:1}
+.fab-label{font-size:10px;font-weight:800;letter-spacing:.3px;line-height:1}
 @media(min-width:430px){.fab{right:calc(50vw - 195px)}}
 .fab:active{transform:scale(0.88);box-shadow:0 2px 12px rgba(62,207,142,0.3)}
 
@@ -598,13 +600,14 @@ body::before{
 /* ── 도움말 버튼 ── */
 .help-btn{
   position:absolute;top:20px;right:20px;
-  width:36px;height:36px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
   background:var(--surface);border:1px solid var(--border);
-  color:var(--muted2);font-size:16px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;
+  border-radius:12px;padding:7px 10px 6px;
+  color:var(--muted2);cursor:pointer;transition:all .2s;
   backdrop-filter:blur(8px);
 }
+.help-btn-icon{font-size:15px;font-weight:700;line-height:1}
+.help-btn-label{font-size:9px;font-weight:700;letter-spacing:.4px;line-height:1}
 .help-btn:active{transform:scale(0.92)}
 
 /* ── 도움말 모달 오버레이 ── */
@@ -687,7 +690,10 @@ body::before{
 <!-- ══ SETUP ══ -->
 <div id="screen-setup" class="screen active">
   <div class="setup-wrap">
-    <button class="help-btn" onclick="openHelp()" aria-label="도움말">?</button>
+    <button class="help-btn" onclick="openHelp()" aria-label="도움말">
+      <span class="help-btn-icon">?</span>
+      <span class="help-btn-label">도움말</span>
+    </button>
     <div class="hero">
       <div class="hero-icon">
         <svg width="62" height="72" viewBox="0 0 62 72" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -964,7 +970,10 @@ body::before{
     </div>
   </div>
 
-  <button class="fab" onclick="openModal()">+</button>
+  <button class="fab" onclick="openModal()">
+    <span class="fab-icon">+</span>
+    <span class="fab-label">판 추가</span>
+  </button>
 
   <div class="bottom-bar">
     <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 취소</button>
