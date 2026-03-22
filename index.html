@@ -69,14 +69,13 @@ body::before{
 
 .hero{text-align:center;padding:60px 0 36px}
 .hero-icon{
-  width:88px;height:88px;
-  background:linear-gradient(135deg,#0f1f18,#080b0a);
-  border:1px solid rgba(42,255,160,0.2);
+  width:96px;height:96px;
+  background:linear-gradient(145deg,#131f1a,#080b0a);
+  border:1px solid rgba(42,255,160,0.15);
   border-radius:28px;
   display:flex;align-items:center;justify-content:center;
-  font-size:44px;
-  margin:0 auto 20px;
-  box-shadow:0 0 48px rgba(42,255,160,0.12);
+  margin:0 auto 22px;
+  box-shadow:0 0 48px rgba(42,255,160,0.1), 0 8px 32px rgba(0,0,0,0.6);
 }
 .hero h1{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:6px;background:linear-gradient(135deg,#fff 30%,#2affa0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:14px;color:var(--muted2);font-weight:500}
@@ -593,7 +592,78 @@ body::before{
 <div id="screen-setup" class="screen active">
   <div class="setup-wrap">
     <div class="hero">
-      <div class="hero-icon">🃏</div>
+      <div class="hero-icon">
+        <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 그림자 -->
+          <ellipse cx="29" cy="53" rx="18" ry="3.5" fill="rgba(0,0,0,0.45)"/>
+
+          <!-- 왼쪽 카드 뒷면 (빨강 화투 뒷면) -->
+          <g transform="rotate(-20 29 29)">
+            <rect x="3" y="11" width="22" height="33" rx="3.5" fill="#c41e3a"/>
+            <rect x="5" y="13" width="18" height="29" rx="2.5" fill="none" stroke="rgba(255,200,200,0.25)" stroke-width="0.8"/>
+            <!-- 뒷면 원형 패턴 -->
+            <circle cx="14" cy="27.5" r="5" fill="none" stroke="rgba(255,200,200,0.3)" stroke-width="0.9"/>
+            <circle cx="14" cy="27.5" r="2" fill="rgba(255,200,200,0.2)"/>
+            <line x1="14" y1="22.5" x2="14" y2="19" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="14" y1="32.5" x2="14" y2="36" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="9" y1="27.5" x2="5.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="19" y1="27.5" x2="22.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+          </g>
+
+          <!-- 오른쪽 카드 뒷면 -->
+          <g transform="rotate(20 29 29)">
+            <rect x="33" y="11" width="22" height="33" rx="3.5" fill="#c41e3a"/>
+            <rect x="35" y="13" width="18" height="29" rx="2.5" fill="none" stroke="rgba(255,200,200,0.25)" stroke-width="0.8"/>
+            <circle cx="44" cy="27.5" r="5" fill="none" stroke="rgba(255,200,200,0.3)" stroke-width="0.9"/>
+            <circle cx="44" cy="27.5" r="2" fill="rgba(255,200,200,0.2)"/>
+            <line x1="44" y1="22.5" x2="44" y2="19" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="44" y1="32.5" x2="44" y2="36" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="39" y1="27.5" x2="35.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+            <line x1="49" y1="27.5" x2="52.5" y2="27.5" stroke="rgba(255,200,200,0.2)" stroke-width="0.8"/>
+          </g>
+
+          <!-- 앞 카드: 8월 공산(芒) 광 — 달·억새 -->
+          <!-- 카드 몸통 -->
+          <rect x="17" y="8" width="24" height="38" rx="4" fill="#111827"/>
+          <rect x="17" y="8" width="24" height="38" rx="4" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
+
+          <!-- 하늘 그라디언트 느낌 -->
+          <rect x="17" y="8" width="24" height="20" rx="4" fill="url(#skyGrad)"/>
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0c1a3a"/>
+              <stop offset="100%" stop-color="#111827"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 달 -->
+          <circle cx="29" cy="20" r="8.5" fill="#fde68a" opacity="0.95"/>
+          <circle cx="29" cy="20" r="8.5" fill="none" stroke="#fbbf24" stroke-width="0.6"/>
+          <!-- 달 내부 무늬 (크레이터 느낌) -->
+          <circle cx="26.5" cy="18.5" r="1.3" fill="rgba(251,191,36,0.35)"/>
+          <circle cx="31" cy="22" r="0.9" fill="rgba(251,191,36,0.3)"/>
+
+          <!-- 억새풀 (pampas grass) -->
+          <line x1="21" y1="37" x2="19.5" y2="29" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="23" y1="37" x2="22" y2="28" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="26" y1="37" x2="25.5" y2="27.5" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="29" y1="37" x2="30" y2="27.5" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="32" y1="37" x2="33.5" y2="28" stroke="#6ee7b7" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="35" y1="37" x2="36.5" y2="29" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- 풀잎 끝 흔들림 -->
+          <line x1="19.5" y1="29" x2="18.5" y2="27" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
+          <line x1="22" y1="28" x2="21.5" y2="26.5" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
+          <line x1="25.5" y1="27.5" x2="26.5" y2="26" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
+          <line x1="30" y1="27.5" x2="31.5" y2="26" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
+          <line x1="33.5" y1="28" x2="35" y2="26.5" stroke="#6ee7b7" stroke-width="1" stroke-linecap="round"/>
+          <line x1="36.5" y1="29" x2="38" y2="27.5" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>
+
+          <!-- 하단 빨간 띠 (광 표시) -->
+          <rect x="17" y="37" width="24" height="9" rx="0 0 4 4" fill="#b91c1c"/>
+          <!-- 光 한자 -->
+          <text x="29" y="44.5" text-anchor="middle" fill="#fde68a" font-family="serif" font-size="7.5" font-weight="bold" letter-spacing="0.5">光</text>
+        </svg>
+      </div>
       <h1>고스톱 계산기</h1>
       <p>가족과 함께하는 스마트 점수 계산</p>
     </div>
