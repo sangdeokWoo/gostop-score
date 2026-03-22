@@ -16,7 +16,7 @@
 <meta property="og:image:width"  content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card"        content="summary_large_image">
-<meta name="description"         content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 3~4인 지원.">
+<meta name="description"         content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 2~6인 지원.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -524,6 +524,8 @@ body::before{
 .podium-bar.p2{background:linear-gradient(to bottom,rgba(148,163,184,0.2),rgba(148,163,184,0.05));border:1px solid rgba(148,163,184,0.2);height:76px}
 .podium-bar.p3{background:linear-gradient(to bottom,rgba(180,120,60,0.2),rgba(180,120,60,0.05));border:1px solid rgba(180,120,60,0.2);height:56px}
 .podium-bar.p4{background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.15);height:40px}
+.podium-bar.p5{background:rgba(244,63,94,0.04);border:1px solid rgba(244,63,94,0.1);height:28px}
+.podium-bar.p6{background:rgba(244,63,94,0.03);border:1px solid rgba(244,63,94,0.08);height:18px}
 .podium-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px;text-align:center}
 .podium-amount{font-size:11px;font-weight:800}
 
@@ -1125,7 +1127,7 @@ function setCount(n) {
 function renderNameList() {
   const c = document.getElementById('name-list');
   c.innerHTML = '';
-  const def = ['플레이어1','플레이어2','플레이어3','플레이어4'];
+  const def = ['플레이어1','플레이어2','플레이어3','플레이어4','플레이어5','플레이어6'];
   for (let i = 0; i < G.playerCount; i++) {
     const row = document.createElement('div');
     row.className = 'name-row';
