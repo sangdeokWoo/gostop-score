@@ -6,7 +6,17 @@
 <meta name="theme-color" content="#080b0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>고스톱 점수계산기</title>
+<title>진관동 타짜들 고스톱 계산기</title>
+<!-- Open Graph / KakaoTalk 링크 미리보기 -->
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="진관동 타짜들 고스톱 계산기 🀄">
+<meta property="og:description" content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 3~4인 지원. 판마다 점수 입력하면 최종 정산까지 바로 나와요.">
+<meta property="og:url"         content="https://sangdeokwoo.github.io/gostop-score/">
+<meta property="og:image"       content="https://sangdeokwoo.github.io/gostop-score/og-image.svg">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="description"         content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 3~4인 지원.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -584,6 +594,92 @@ body::before{
 .shake{animation:shake .3s ease}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .slide-up{animation:slideUp .3s ease}
+
+/* ── 도움말 버튼 ── */
+.help-btn{
+  position:absolute;top:20px;right:20px;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--muted2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+  backdrop-filter:blur(8px);
+}
+.help-btn:active{transform:scale(0.92)}
+
+/* ── 도움말 모달 오버레이 ── */
+.help-overlay{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.help-overlay.open{display:flex;align-items:flex-end}
+.help-sheet{
+  width:100%;max-height:88vh;
+  background:#0f1613;
+  border-radius:24px 24px 0 0;
+  border-top:1px solid rgba(255,255,255,0.1);
+  overflow-y:auto;
+  animation:sheetUp .3s cubic-bezier(.32,1.2,.4,1);
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.help-handle{
+  width:36px;height:4px;background:rgba(255,255,255,0.2);
+  border-radius:2px;margin:14px auto 0;
+}
+.help-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px 12px;
+}
+.help-header h2{font-size:18px;font-weight:800;color:#fff}
+.help-close{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--muted2);font-size:16px;display:flex;
+  align-items:center;justify-content:center;cursor:pointer;
+}
+.help-body{padding:0 20px 40px;display:flex;flex-direction:column;gap:16px}
+
+/* 섹션 */
+.help-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.help-section-title{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 16px 10px;
+  font-size:13px;font-weight:800;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+.help-section-title span{font-size:16px}
+.help-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.04);
+  gap:12px;
+}
+.help-row:last-child{border-bottom:none}
+.help-row-left{flex:1}
+.help-row-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.help-row-desc{font-size:12px;color:var(--muted2);line-height:1.5}
+.help-badge{
+  flex-shrink:0;padding:4px 10px;border-radius:20px;
+  font-size:12px;font-weight:700;white-space:nowrap;margin-top:1px;
+}
+.badge-green{background:rgba(42,255,160,0.15);color:#2affa0;border:1px solid rgba(42,255,160,0.3)}
+.badge-red{background:rgba(244,63,94,0.15);color:#f43f5e;border:1px solid rgba(244,63,94,0.3)}
+.badge-gold{background:rgba(245,166,35,0.15);color:#f5a623;border:1px solid rgba(245,166,35,0.3)}
+.badge-blue{background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3)}
+
+/* 사용법 스텝 */
+.help-steps{padding:8px 16px 16px;display:flex;flex-direction:column;gap:8px}
+.help-step{display:flex;align-items:flex-start;gap:10px}
+.step-num{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(42,255,160,0.2);color:#2affa0;
+  font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.step-text{font-size:13px;color:var(--muted2);line-height:1.6}
+.step-text strong{color:#fff;font-weight:700}
 </style>
 </head>
 <body>
@@ -591,6 +687,7 @@ body::before{
 <!-- ══ SETUP ══ -->
 <div id="screen-setup" class="screen active">
   <div class="setup-wrap">
+    <button class="help-btn" onclick="openHelp()" aria-label="도움말">?</button>
     <div class="hero">
       <div class="hero-icon">
         <svg width="62" height="72" viewBox="0 0 62 72" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -693,15 +790,149 @@ body::before{
     </div>
 
     <button class="btn-start" onclick="startGame()">게임 시작 →</button>
+  </div>
+</div>
 
-    <div class="glass rules-card" style="margin-top:14px;">
-      <strong>📋 규칙 안내</strong>
-      <div style="margin-top:10px;">
-        <div>· 3점=1단위, N점=(N-2)단위</div>
-        <div>· 고 N번 → 전체 ×(N+1)배</div>
-        <div>· 흔들기·폭탄 → 각 ×2배 (중첩)</div>
-        <div>· 피박·광박 → 해당 패자만 ×2배</div>
+<!-- ══ 도움말 모달 ══ -->
+<div class="help-overlay" id="help-overlay" onclick="closeHelpOutside(event)">
+  <div class="help-sheet" id="help-sheet">
+    <div class="help-handle"></div>
+    <div class="help-header">
+      <h2>📋 규칙 &amp; 사용법</h2>
+      <button class="help-close" onclick="closeHelp()">✕</button>
+    </div>
+    <div class="help-body">
+
+      <!-- 앱 사용법 -->
+      <div class="help-section">
+        <div class="help-section-title"><span>📱</span> 앱 사용법</div>
+        <div class="help-steps">
+          <div class="help-step"><div class="step-num">1</div><div class="step-text"><strong>인원 수 선택</strong> — 3명 또는 4명을 선택하세요</div></div>
+          <div class="help-step"><div class="step-num">2</div><div class="step-text"><strong>이름 입력</strong> — 플레이어 이름을 직접 입력하세요</div></div>
+          <div class="help-step"><div class="step-num">3</div><div class="step-text"><strong>판돈 설정</strong> — 기본 단위(원)를 입력하세요. 예) 100원이면 1단위=100원</div></div>
+          <div class="help-step"><div class="step-num">4</div><div class="step-text"><strong>판마다 입력</strong> — 승자, 점수, 고 횟수, 특수 규칙을 체크하면 자동 계산</div></div>
+          <div class="help-step"><div class="step-num">5</div><div class="step-text"><strong>최종 정산</strong> — 누가 누구한테 얼마를 줘야 하는지 한눈에 확인</div></div>
+        </div>
       </div>
+
+      <!-- 기본 점수 -->
+      <div class="help-section">
+        <div class="help-section-title"><span>🀄</span> 기본 점수 계산</div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">3점</div>
+            <div class="help-row-desc">최소 유효 점수 — 패자들이 1단위씩 지급</div>
+          </div>
+          <div class="help-badge badge-green">× 1단위</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">4점 이상</div>
+            <div class="help-row-desc">N점 = (N - 2)단위 지급</div>
+          </div>
+          <div class="help-badge badge-green">(N-2)단위</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">3점 미만</div>
+            <div class="help-row-desc">점수 미달 — 해당 판은 무효 처리</div>
+          </div>
+          <div class="help-badge badge-red">무효</div>
+        </div>
+      </div>
+
+      <!-- 고/스톱 -->
+      <div class="help-section">
+        <div class="help-section-title"><span>🔥</span> 고(Go) / 스톱(Stop)</div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">스톱</div>
+            <div class="help-row-desc">3점 이상이면 바로 종료 — 현재 배율로 정산</div>
+          </div>
+          <div class="help-badge badge-green">× 1배</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">고 1번</div>
+            <div class="help-row-desc">패자들이 내야 할 금액이 2배가 됨</div>
+          </div>
+          <div class="help-badge badge-gold">× 2배</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">고 2번</div>
+            <div class="help-row-desc">패자들이 내야 할 금액이 3배가 됨</div>
+          </div>
+          <div class="help-badge badge-gold">× 3배</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">고 N번</div>
+            <div class="help-row-desc">N번 고를 선언하고 스톱하면 (N+1)배</div>
+          </div>
+          <div class="help-badge badge-gold">× (N+1)배</div>
+        </div>
+      </div>
+
+      <!-- 특수 규칙 -->
+      <div class="help-section">
+        <div class="help-section-title"><span>⚡</span> 특수 규칙</div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">흔들기</div>
+            <div class="help-row-desc">같은 달 카드 2장 보유 시 시작 전 선언. 전체 배율 ×2배</div>
+          </div>
+          <div class="help-badge badge-blue">× 2배</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">폭탄</div>
+            <div class="help-row-desc">같은 달 카드 4장 보유 시 선언 (흔들기 2회분). 전체 배율 ×4배</div>
+          </div>
+          <div class="help-badge badge-blue">× 4배</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">피박</div>
+            <div class="help-row-desc">피를 5장 미만 가진 패자는 별도로 2배 추가 부담</div>
+          </div>
+          <div class="help-badge badge-red">패자만 ×2</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">광박</div>
+            <div class="help-row-desc">광이 한 장도 없는 패자는 별도로 2배 추가 부담</div>
+          </div>
+          <div class="help-badge badge-red">패자만 ×2</div>
+        </div>
+      </div>
+
+      <!-- 정산 방식 -->
+      <div class="help-section">
+        <div class="help-section-title"><span>💰</span> 정산 방식</div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">3인 게임</div>
+            <div class="help-row-desc">패자 2명이 각자 승자에게 지급. 피박·광박은 해당 패자만 추가</div>
+          </div>
+          <div class="help-badge badge-green">1 vs 2</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">4인 게임</div>
+            <div class="help-row-desc">패자 3명이 각자 승자에게 지급. 나머지 구조는 동일</div>
+          </div>
+          <div class="help-badge badge-green">1 vs 3</div>
+        </div>
+        <div class="help-row">
+          <div class="help-row-left">
+            <div class="help-row-name">최종 정산</div>
+            <div class="help-row-desc">전체 판 종료 후 누적 점수 기반으로 최소 이체 횟수로 정산</div>
+          </div>
+          <div class="help-badge badge-gold">자동 계산</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -849,6 +1080,19 @@ body::before{
 </div>
 
 <script>
+// ── 도움말 모달 ──
+function openHelp() {
+  document.getElementById('help-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp() {
+  document.getElementById('help-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeHelpOutside(e) {
+  if (e.target === document.getElementById('help-overlay')) closeHelp();
+}
+
 const SAVE_KEY = 'gostop_v3';
 const AV = ['av0','av1','av2','av3'];
 const MEDALS = ['🥇','🥈','🥉','😢'];
