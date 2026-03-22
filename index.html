@@ -766,11 +766,11 @@ body::before{
         </svg>
       </div>
       <h1>진관동 타짜들 고스톱 계산기</h1>
-      <p>점수 및 금액 계산기</p>
+      <p>가족과 함께라 더 재밌는 🀄</p>
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">인원 수</div>
+      <div class="section-label">몇 명이서 치세요?</div>
       <div class="count-toggle" id="count-toggle">
         <button class="count-btn active" data-n="3" onclick="setCount(3)">
           3<span>명</span>
@@ -782,12 +782,12 @@ body::before{
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">플레이어 이름</div>
+      <div class="section-label">참가자 이름</div>
       <div class="name-list" id="name-list"></div>
     </div>
 
     <div class="glass setup-card">
-      <div class="section-label">기본 단위 (판돈)</div>
+      <div class="section-label">판돈 — 1단위에 얼마예요?</div>
       <div class="unit-row">
         <span class="unit-prefix">₩</span>
         <input class="unit-input" type="number" id="base-unit" value="100" min="10" step="10" inputmode="numeric">
@@ -795,7 +795,7 @@ body::before{
       </div>
     </div>
 
-    <button class="btn-start" onclick="startGame()">게임 시작 →</button>
+    <button class="btn-start" onclick="startGame()">🀄 게임 시작!</button>
   </div>
 </div>
 
@@ -959,13 +959,13 @@ body::before{
 
   <div class="history-wrap">
     <div class="history-header">
-      <div class="section-label" style="margin-bottom:0">판 기록</div>
+      <div class="section-label" style="margin-bottom:0">오늘의 판 기록 📝</div>
     </div>
     <div class="glass history-card" id="history-card">
       <div class="empty-state">
         <div class="empty-icon">🎴</div>
-        <div class="empty-title">아직 기록이 없습니다</div>
-        <div class="empty-sub">+ 버튼을 눌러 점수를 입력하세요</div>
+        <div class="empty-title">아직 기록이 없어요</div>
+        <div class="empty-sub">아래 '판 추가' 버튼으로 시작해요 👇</div>
       </div>
     </div>
   </div>
@@ -976,8 +976,8 @@ body::before{
   </button>
 
   <div class="bottom-bar">
-    <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 취소</button>
-    <button class="btn-bar btn-bar-sm" onclick="confirmReset()">새게임</button>
+    <button class="btn-bar btn-bar-sm" onclick="undoRound()">↩ 마지막판 취소</button>
+    <button class="btn-bar btn-bar-sm" onclick="confirmReset()">새 게임</button>
     <button class="btn-bar btn-bar-main" onclick="showSettlement()">💰 최종 정산</button>
   </div>
 </div>
@@ -995,17 +995,20 @@ body::before{
 
     <div id="podium-wrap"></div>
 
-    <div class="section-label">플레이어 결과</div>
+    <div class="section-label">오늘의 성적</div>
     <div class="glass result-list" style="padding:4px 16px;" id="result-list"></div>
 
     <div class="transfers-section">
-      <div class="section-label">💸 정산 내역</div>
+      <div class="section-label">💸 누가 누구한테 줄까요?</div>
       <div id="transfer-list"></div>
     </div>
 
     <div class="settle-actions">
-      <button class="btn-share" onclick="shareResult()">📤 카카오톡으로 공유</button>
-      <button class="btn-new" onclick="confirmReset()">🔄 새 게임 시작</button>
+      <button class="btn-share" onclick="shareResult()">📤 결과 공유하기</button>
+      <button class="btn-new" onclick="confirmReset()">🎴 한 판 더!</button>
+      <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.2);margin-top:24px;line-height:1.6;">
+  아부지 어머니 동생 재밌게 치세요 😊<br>아들이 만들었어요 ❤️
+</p>
     </div>
   </div>
 </div>
@@ -1014,17 +1017,17 @@ body::before{
 <div id="modal-overlay" class="modal-overlay">
   <div class="modal-sheet" id="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">판 점수 입력</div>
+    <div class="modal-title">이번 판 결과</div>
 
     <!-- Winner -->
     <div class="m-section">
-      <div class="m-label">승자</div>
+      <div class="m-label">누가 이겼어요? 🏆</div>
       <div class="winner-grid" id="winner-grid"></div>
     </div>
 
     <!-- Score -->
     <div class="m-section">
-      <div class="m-label">점수</div>
+      <div class="m-label">점수가 몇 점이에요?</div>
       <div class="stepper-box">
         <button class="step-btn" id="score-minus">−</button>
         <div class="step-center">
@@ -1038,7 +1041,7 @@ body::before{
 
     <!-- Go -->
     <div class="m-section">
-      <div class="m-label">고(GO) 횟수</div>
+      <div class="m-label">고(GO) 몇 번 했어요?</div>
       <div class="stepper-box">
         <button class="step-btn" id="go-minus">−</button>
         <div class="step-center">
@@ -1052,7 +1055,7 @@ body::before{
 
     <!-- Specials -->
     <div class="m-section">
-      <div class="m-label">특수 규칙</div>
+      <div class="m-label">특수 규칙 있나요?</div>
       <div class="glass" style="padding:4px 16px;border-radius:14px;">
         <div class="toggle-row" id="row-shake">
           <div class="toggle-left">
@@ -1073,18 +1076,18 @@ body::before{
 
     <!-- Loser rules -->
     <div class="m-section" id="loser-section" style="display:none;">
-      <div class="m-label">패자별 벌칙</div>
+      <div class="m-label">진 사람 벌칙</div>
       <div id="loser-container"></div>
     </div>
 
     <!-- Preview -->
     <div class="preview-box" id="preview" style="display:none;">
-      <div class="preview-title">계산 미리보기</div>
+      <div class="preview-title">💰 이번 판 계산</div>
       <div id="preview-body"></div>
     </div>
 
-    <button class="btn-confirm" id="confirm-btn" style="margin-top:20px;">확인 →</button>
-    <button class="btn-cancel" onclick="closeModal()">취소</button>
+    <button class="btn-confirm" id="confirm-btn" style="margin-top:20px;">✓ 기록하기</button>
+    <button class="btn-cancel" onclick="closeModal()">닫기</button>
   </div>
 </div>
 
@@ -1137,7 +1140,7 @@ function startGame() {
     const el = document.getElementById('n'+i);
     names.push(el.value.trim() || '플레이어'+(i+1));
   }
-  if (new Set(names).size !== names.length) { alert('이름이 중복됩니다!'); return; }
+  if (new Set(names).size !== names.length) { alert('같은 이름이 있어요! 다르게 입력해 주세요 😊'); return; }
   const unit = parseInt(document.getElementById('base-unit').value)||100;
   G.players = names; G.baseUnit = unit; G.balances = {}; G.rounds = [];
   names.forEach(n => G.balances[n] = 0);
@@ -1177,7 +1180,7 @@ function renderGrid() {
 function renderHistory() {
   const c = document.getElementById('history-card');
   if (!G.rounds.length) {
-    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🎴</div><div class="empty-title">아직 기록이 없습니다</div><div class="empty-sub">+ 버튼을 눌러 점수를 입력하세요</div></div>';
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🎴</div><div class="empty-title">아직 기록이 없어요</div><div class="empty-sub">아래 \'판 추가\' 버튼으로 시작해요 👇</div></div>';
     return;
   }
   c.innerHTML = '<div style="padding:4px 0">' +
@@ -1212,8 +1215,8 @@ function renderHistory() {
 
 // ── UNDO ──
 function undoRound() {
-  if (!G.rounds.length) { alert('취소할 판이 없습니다.'); return; }
-  if (!confirm('마지막 판을 취소할까요?')) return;
+  if (!G.rounds.length) { alert('취소할 판이 없어요!'); return; }
+  if (!confirm('마지막 판을 취소할까요? 🤔')) return;
   const r = G.rounds.pop();
   G.balances[r.winner] -= r.winAmount;
   r.losers.forEach(l => G.balances[l.name] += l.amount);
@@ -1381,7 +1384,7 @@ document.getElementById('confirm-btn').onclick = () => {
 
 // ── SETTLEMENT ──
 function showSettlement() {
-  if (!G.rounds.length) { alert('아직 진행한 판이 없습니다!'); return; }
+  if (!G.rounds.length) { alert('아직 기록된 판이 없어요 🀄 먼저 한 판 해보세요!'); return; }
   document.getElementById('settle-meta').textContent = '총 ' + G.rounds.length + '판 · 단위 ' + fmt(G.baseUnit);
 
   // Podium
@@ -1502,7 +1505,7 @@ function showScreen(s) {
   window.scrollTo(0,0);
 }
 function confirmReset() {
-  if (G.rounds.length && !confirm('현재 게임을 종료하고 새 게임을 시작할까요?')) return;
+  if (G.rounds.length && !confirm('지금 게임을 끝내고 새로 시작할까요? 💨')) return;
   localStorage.removeItem(SAVE_KEY);
   G={playerCount:G.playerCount,players:[],baseUnit:G.baseUnit,balances:{},rounds:[]};
   renderNameList(); showScreen('setup');
