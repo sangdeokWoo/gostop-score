@@ -10,7 +10,7 @@
 <!-- Open Graph / KakaoTalk 링크 미리보기 -->
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="진관동 타짜들 고스톱 계산기 🎴">
-<meta property="og:description" content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 3~4인 지원. 판마다 점수 입력하면 최종 정산까지 바로 나옴다.">
+<meta property="og:description" content="고/스톱 배율, 피박, 광박, 흔들기, 폭탄 자동 계산! 2~6인 지원. 판마다 점수 입력하면 최종 정산까지 바로 나옴다.">
 <meta property="og:url"         content="https://sangdeokwoo.github.io/gostop-score/">
 <meta property="og:image"       content="https://sangdeokwoo.github.io/gostop-score/og-image.svg">
 <meta property="og:image:width"  content="1200">
@@ -99,19 +99,20 @@ body::before{
 .setup-card{padding:20px;margin-bottom:14px}
 
 /* Count toggle */
-.count-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.count-toggle{display:flex;gap:6px}
 .count-btn{
-  padding:14px;
+  flex:1;
+  padding:12px 4px;
   background:var(--surface);
   border:1.5px solid var(--border);
   border-radius:12px;
   color:var(--muted2);
-  font-size:22px;font-weight:700;
+  font-size:20px;font-weight:700;
   cursor:pointer;transition:all .2s;
   font-family:inherit;
   display:flex;flex-direction:column;align-items:center;gap:2px;
 }
-.count-btn span{font-size:11px;font-weight:500;color:var(--muted)}
+.count-btn span{font-size:10px;font-weight:500;color:var(--muted)}
 .count-btn.active{
   background:var(--green-dim);
   border-color:var(--green);
@@ -591,6 +592,8 @@ body::before{
 .av1{background:rgba(96,165,250,0.2);color:#60a5fa}
 .av2{background:rgba(245,166,35,0.2);color:#f5a623}
 .av3{background:rgba(244,63,94,0.2);color:#f43f5e}
+.av4{background:rgba(168,85,247,0.2);color:#a855f7}
+.av5{background:rgba(251,146,60,0.2);color:#fb923c}
 
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shake .3s ease}
@@ -772,12 +775,11 @@ body::before{
     <div class="glass setup-card">
       <div class="section-label">인원 수</div>
       <div class="count-toggle" id="count-toggle">
-        <button class="count-btn active" data-n="3" onclick="setCount(3)">
-          3<span>명</span>
-        </button>
-        <button class="count-btn" data-n="4" onclick="setCount(4)">
-          4<span>명</span>
-        </button>
+        <button class="count-btn" data-n="2" onclick="setCount(2)">2<span>명</span></button>
+        <button class="count-btn active" data-n="3" onclick="setCount(3)">3<span>명</span></button>
+        <button class="count-btn" data-n="4" onclick="setCount(4)">4<span>명</span></button>
+        <button class="count-btn" data-n="5" onclick="setCount(5)">5<span>명</span></button>
+        <button class="count-btn" data-n="6" onclick="setCount(6)">6<span>명</span></button>
       </div>
     </div>
 
@@ -813,7 +815,7 @@ body::before{
       <div class="help-section">
         <div class="help-section-title"><span>📱</span> 앱 사용법</div>
         <div class="help-steps">
-          <div class="help-step"><div class="step-num">1</div><div class="step-text"><strong>인원 수 선택</strong> — 3명 또는 4명 고르슈</div></div>
+          <div class="help-step"><div class="step-num">1</div><div class="step-text"><strong>인원 수 선택</strong> — 2명부터 6명까지 고르슈</div></div>
           <div class="help-step"><div class="step-num">2</div><div class="step-text"><strong>이름 입력</strong> — 이름 직접 입력하슈</div></div>
           <div class="help-step"><div class="step-num">3</div><div class="step-text"><strong>판돈 설정</strong> — 판돈 단위 입력하슈. 100원이면 1단위=100원임다</div></div>
           <div class="help-step"><div class="step-num">4</div><div class="step-text"><strong>판마다 입력</strong> — 이긴 사람, 점수, 고 횟수 넣으면 자동 계산됨다</div></div>
@@ -918,17 +920,17 @@ body::before{
         <div class="help-section-title"><span>💰</span> 정산 방식</div>
         <div class="help-row">
           <div class="help-row-left">
-            <div class="help-row-name">3인 게임</div>
-            <div class="help-row-desc">진 2명이 각자 이긴 사람한테 냄다. 피박·광박은 해당자만 추가임다</div>
+            <div class="help-row-name">2~6인 게임</div>
+            <div class="help-row-desc">진 사람들이 각자 이긴 사람한테 냄다. 인원 수 상관없이 동일 구조임다</div>
           </div>
-          <div class="help-badge badge-green">1 vs 2</div>
+          <div class="help-badge badge-green">1 vs N</div>
         </div>
         <div class="help-row">
           <div class="help-row-left">
-            <div class="help-row-name">4인 게임</div>
-            <div class="help-row-desc">진 3명이 각자 이긴 사람한테 냄다. 나머진 똑같슴다</div>
+            <div class="help-row-name">피박·광박</div>
+            <div class="help-row-desc">해당 조건인 패자만 추가 ×2배. 나머지 패자는 기본 금액임다</div>
           </div>
-          <div class="help-badge badge-green">1 vs 3</div>
+          <div class="help-badge badge-red">해당자만</div>
         </div>
         <div class="help-row">
           <div class="help-row-left">
@@ -1106,8 +1108,8 @@ function closeHelpOutside(e) {
 }
 
 const SAVE_KEY = 'gostop_v3';
-const AV = ['av0','av1','av2','av3'];
-const MEDALS = ['🥇','🥈','🥉','😢'];
+const AV = ['av0','av1','av2','av3','av4','av5'];
+const MEDALS = ['🥇','🥈','🥉','🏅','🏅','😢'];
 const INITIALS = (s) => s.slice(0,1);
 
 let G = { playerCount:3, players:[], baseUnit:100, balances:{}, rounds:[] };
@@ -1164,10 +1166,11 @@ function renderGrid() {
     const isTop = r === 0 && bal > 0;
     const isLast = r === G.players.length-1 && bal < 0;
     const wins = G.rounds.filter(x => x.winner === p).length;
+    const medal = (isLast && G.players.length > 1) ? '😢' : (MEDALS[r]||'');
     const d = document.createElement('div');
     d.className = 'p-card' + (isTop ? ' rank1' : isLast ? ' last' : '');
     d.innerHTML =
-      '<div class="p-rank">' + (MEDALS[r]||'') + '</div>' +
+      '<div class="p-rank">' + medal + '</div>' +
       '<div class="p-name">' + esc(p) + '</div>' +
       '<div class="p-balance ' + (bal>0?'pos':bal<0?'neg':'zero') + '">' +
         (bal>0?'+':'') + fmt(bal) +
@@ -1394,14 +1397,14 @@ function showSettlement() {
 
   // Podium
   const sorted = [...G.players].sort((a,b) => G.balances[b]-G.balances[a]);
+  // 2명: 그대로, 3명 이상: 상위 3명 클래식 포디움
   let podiumOrder;
-  if (sorted.length === 4) podiumOrder = [sorted[1],sorted[0],sorted[2],sorted[3]];
-  else if (sorted.length === 3) podiumOrder = [sorted[1],sorted[0],sorted[2]];
-  else podiumOrder = sorted;
+  if (sorted.length === 2)      podiumOrder = [sorted[0], sorted[1]];
+  else if (sorted.length === 3) podiumOrder = [sorted[1], sorted[0], sorted[2]];
+  else                          podiumOrder = [sorted[1], sorted[0], sorted[2]];
 
-  const podiumHeights = {[sorted[0]]:'p1',[sorted[1]]:'p2'};
-  if (sorted[2]) podiumHeights[sorted[2]] = 'p3';
-  if (sorted[3]) podiumHeights[sorted[3]] = 'p4';
+  const podiumHeights = {};
+  sorted.forEach((p, i) => { podiumHeights[p] = 'p' + (i+1); });
 
   document.getElementById('podium-wrap').innerHTML =
     '<div class="podium">' +
@@ -1428,7 +1431,7 @@ function showSettlement() {
       return '<div class="result-item">' +
         '<div class="result-avatar ' + AV[pi] + '">' + INITIALS(p) + '</div>' +
         '<div class="result-info">' +
-          '<div class="result-name">' + MEDALS[i] + ' ' + esc(p) + '</div>' +
+          '<div class="result-name">' + (i === sorted.length-1 && sorted.length>1 ? '😢' : (MEDALS[i]||'🏅')) + ' ' + esc(p) + '</div>' +
           '<div class="result-wins">' + wins + '승</div>' +
         '</div>' +
         '<div class="result-bal ' + (bal>0?'amt-gain':bal<0?'amt-loss':'') + '">' + (bal>0?'+':'') + fmt(bal) + '</div>' +
@@ -1439,7 +1442,7 @@ function showSettlement() {
   const transfers = getTransfers();
   const tl = document.getElementById('transfer-list');
   if (!transfers.length) {
-    tl.innerHTML = '<div style="color:var(--muted2);font-size:14px;padding:12px 0;text-align:center">🎉 정산할 금액이 없습니다</div>';
+    tl.innerHTML = '<div style="color:var(--muted2);font-size:14px;padding:12px 0;text-align:center">🎉 모두 비겼슈! 정산 없슴다</div>';
   } else {
     tl.innerHTML = transfers.map(t =>
       '<div class="transfer-item">' +
@@ -1481,7 +1484,8 @@ function shareResult() {
   sorted.forEach((p,i) => {
     const b = G.balances[p];
     const w = G.rounds.filter(r=>r.winner===p).length;
-    lines.push(MEDALS[i]+' '+p+': '+(b>0?'+':'')+fmt(b)+' ('+w+'승)');
+    const m = (i === sorted.length-1 && sorted.length>1) ? '😢' : (MEDALS[i]||'🏅');
+    lines.push(m+' '+p+': '+(b>0?'+':'')+fmt(b)+' ('+w+'승)');
   });
   lines.push('', '💸 정산:');
   transfers.length ? transfers.forEach(t => lines.push(t.from+' → '+t.to+': '+fmt(t.amount))) : lines.push('정산 없음');
